@@ -16,7 +16,7 @@ public class GameScreen extends Screen<RenderShared> {
         super(new Layer<RenderShared>() {
             @Override
             public void render(RenderShared shared) {
-
+                //System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
             }
         }, new Layer<RenderShared>() {
             final SpriteBatch batch = new SpriteBatch();
@@ -27,9 +27,25 @@ public class GameScreen extends Screen<RenderShared> {
                 batch.end();
             }
         }, new Layer<RenderShared>() {
+            final SpriteBatch batch = new SpriteBatch();
             @Override
             public void render(RenderShared shared) {
-                //System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
+                batch.begin();
+                batch.draw(Assets.textures.fistTopTex, Gdx.input.getX() - 50, 600);
+                batch.draw(Assets.textures.fistLeftTex, 50, 630 - Gdx.input.getY());
+                batch.end();
+
+                if(shared.colAttack != null){
+                    boolean res = shared.colAttack.render(null);
+                    if(!res)
+                        shared.colAttack = null;
+                }
+
+                if(shared.rowAttack != null){
+                    boolean res = shared.rowAttack.render(null);
+                    if(!res)
+                        shared.rowAttack = null;
+                }
             }
         });
     }

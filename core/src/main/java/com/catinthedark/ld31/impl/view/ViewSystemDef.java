@@ -1,5 +1,6 @@
 package com.catinthedark.ld31.impl.view;
 
+import com.catinthedark.ld31.impl.common.AttackDirection;
 import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
@@ -29,12 +30,18 @@ public class ViewSystemDef extends AbstractSystemDef {
         final ScreenManager<RenderShared> screenManager = new ScreenManager<>(new GameScreen());
 
         void render(float delay) {
-            renderShared.delay  = delay;
+            renderShared.delay = delay;
             screenManager.render(renderShared);
         }
 
-        void handleDaddyAttack(DaddyAttack attack){
+        void handleDaddyAttack(DaddyAttack attack) {
             System.out.println("View:" + attack);
+            if (attack.direction == AttackDirection.BY_COL)
+                renderShared.colAttack = RenderFactory.createColAttack(renderShared, (int) attack
+                    .pos.x);
+            else
+                renderShared.rowAttack = RenderFactory.createRowAttack(renderShared, (int) attack
+                    .pos.y);
         }
     }
 
