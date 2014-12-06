@@ -2,8 +2,10 @@ package com.catinthedark.ld31.impl.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.Constants;
@@ -20,10 +22,21 @@ public class GameScreen extends Screen<RenderShared> {
 
     public GameScreen(){
         super(new Layer<RenderShared>() {
+            final SpriteBatch batch = new SpriteBatch();
+            final SpriteBatch fboBatch = new SpriteBatch();
+            final FrameBuffer fbo = new FrameBuffer(Pixmap.Format.RGBA8888,
+                    (int)Constants.GAME_RECT.width,
+                    (int)Constants.GAME_RECT.height,
+                    false);
+
             @Override
             public void render(RenderShared shared) {
                 //System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
-                final SpriteBatch batch = new SpriteBatch();
+                fbo.begin();
+                Gdx.gl.glClearColor(1.0f, 0, 0, 1.0f);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                shared.camera.update();
                 batch.setProjectionMatrix(shared.camera.combined);
                 batch.begin();
                 shared.levelView.forEach(row -> {
@@ -32,7 +45,7 @@ public class GameScreen extends Screen<RenderShared> {
                             TextureRegion tex = null;
                             switch (block.type) {
                                 case NORMAL:
-                                    tex = Assets.textures.runningStringTR[0][0];
+                                    tex = Assets.textures.runningStringTR[block.y == 0 ? 1 : 0][(block.x / 32) % Assets.textures.runningStringTR[0].length];
                                 case EMPTY:
                                     break;
                             }
@@ -41,6 +54,12 @@ public class GameScreen extends Screen<RenderShared> {
                     }
                 });
                 batch.end();
+                fbo.end();
+                TextureRegion reg = new TextureRegion(fbo.getColorBufferTexture());
+                reg.flip(false, true);
+                fboBatch.begin();
+                fboBatch.draw(reg, Constants.GAME_RECT.x, 768 - Constants.GAME_RECT.y - Constants.GAME_RECT.height);
+                fboBatch.end();
             }
         }, new Layer<RenderShared>() {
             final SpriteBatch batch = new SpriteBatch();

@@ -47,6 +47,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         final Map<Long, Body> blocks = new HashMap<>();
 
         void update(float delta) {
+
             gameShared.pPos.update((pos) -> pos.x = pPos.x);
             world.step(delta, 6, 10);
         }

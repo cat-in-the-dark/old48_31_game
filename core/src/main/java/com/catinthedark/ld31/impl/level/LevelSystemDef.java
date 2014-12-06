@@ -47,8 +47,6 @@ public class LevelSystemDef extends AbstractSystemDef{
         }
 
         public void addPreset() {
-            System.out.println("add preset!");
-
             LevelMatrix.ColMapper mapper = matrix.nextCol();
             BlockType[] col = new BlockType[]{BlockType.NORMAL, BlockType.NORMAL, BlockType.EMPTY};
             for (int y = 0; y < col.length; y++) {

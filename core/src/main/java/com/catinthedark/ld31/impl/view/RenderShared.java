@@ -10,7 +10,12 @@ import com.catinthedark.ld31.lib.view.Renderable;
  * Created by over on 06.12.14.
  */
 public class RenderShared {
-    public final Camera camera = new OrthographicCamera(1366, 768);
+    public final Camera camera = new OrthographicCamera(755, 520);
+    {
+        camera.position.x += 755/2;
+        camera.position.y += 520/2;
+        camera.update();
+    }
     public float delay;
     public GameShared gameShared;
     public Renderable rowAttack;
