@@ -8,6 +8,8 @@ import com.catinthedark.ld31.impl.input.InputSystemDef;
 import com.catinthedark.ld31.impl.level.LevelSystemDef;
 import com.catinthedark.ld31.impl.physics.PhysicsSystemDef;
 import com.catinthedark.ld31.impl.view.ViewSystemDef;
+import com.catinthedark.ld31.lib.common.Nothing;
+import com.catinthedark.ld31.lib.io.Pipe;
 import com.catinthedark.ld31.lib.run.CallbackRunner;
 import com.catinthedark.ld31.lib.run.Launcher;
 
@@ -21,6 +23,7 @@ public class Ld31 extends ApplicationAdapter {
         Assets.init();
 
         GameShared gameShared = new GameShared();
+        Pipe<Nothing> gameStart = new Pipe<>();
         InputSystemDef inputSystem = new InputSystemDef();
         PhysicsSystemDef physicsSystem = new PhysicsSystemDef(gameShared);
         LevelSystemDef levelSystem = new LevelSystemDef(gameShared);
@@ -33,10 +36,19 @@ public class Ld31 extends ApplicationAdapter {
         levelSystem.createBlock.connect(physicsSystem.onCreateBlock);
         inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
 
+        gameStart.connect(physicsSystem.onGameStart, levelSystem.onGameStart);
+
         Launcher.inThread(inputSystem);
         Launcher.inThread(physicsSystem);
         Launcher.inThread(levelSystem);
         callbackRunner = Launcher.viaCallback(viewSystem);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                gameStart.write(Nothing.NONE);
+            }
+        }).start();
     }
 
     @Override

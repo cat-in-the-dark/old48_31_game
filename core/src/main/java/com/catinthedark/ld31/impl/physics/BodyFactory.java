@@ -32,4 +32,19 @@ public class BodyFactory {
 
         return blockBody;
     }
+
+    public static Body createPlayer(World world){
+        CircleShape playerShape = new CircleShape();
+        playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.fixedRotation = true;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(5, 10);
+        Body playerBody = world.createBody(bodyDef);
+        Fixture pFix = playerBody.createFixture(playerShape, 0.1f);
+        pFix.setUserData(new PLayerUserData());
+        pFix.setFriction(Constants.FRICTION);
+
+        return  playerBody;
+    }
 }

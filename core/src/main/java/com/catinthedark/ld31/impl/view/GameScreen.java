@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Vector2;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.level.LevelBlock;
@@ -31,7 +32,6 @@ public class GameScreen extends Screen<RenderShared> {
 
             @Override
             public void render(RenderShared shared) {
-                //System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
                 fbo.begin();
                 Gdx.gl.glClearColor(1.0f, 0, 0, 1.0f);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -45,14 +45,17 @@ public class GameScreen extends Screen<RenderShared> {
                             TextureRegion tex = null;
                             switch (block.type) {
                                 case NORMAL:
-                                    tex = Assets.textures.runningStringTR[block.y == 0 ? 1 : 0][(block.x / 32) % Assets.textures.runningStringTR[0].length];
+                                    tex = Assets.textures.runningStringTR[block.y == 0 ? 1 : 0][
+                                        (block.x / 32) % Assets.textures.runningStringTR[0].length];
                                 case EMPTY:
                                     break;
                             }
-                            batch.draw(tex, block.x - Constants.BLOCK_WIDTH * 32 / 2, block.y - Constants.BLOCK_HEIGHT * 32 / 2);
+                            batch.draw(tex, block.x, block.y);
                         }
                     }
                 });
+                Vector2 pPos = shared.gameShared.pPos.get();
+                batch.draw(Assets.textures.childTexture, pPos.x * 32 - 16, pPos.y * 32 - 16);
                 batch.end();
                 fbo.end();
                 TextureRegion reg = new TextureRegion(fbo.getColorBufferTexture());

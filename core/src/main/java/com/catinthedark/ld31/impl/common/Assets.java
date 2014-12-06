@@ -24,6 +24,7 @@ public class Assets {
         public Texture fistLeftTex;
         public Texture fistTopTex;
         public Texture runningStringTex;
+        public Texture childTexture;
         public TextureRegion[][] runningStringTR;
         public Texture roomTex;
 
@@ -31,6 +32,7 @@ public class Assets {
         public void init() {
             fistLeftTex = new Texture(Gdx.files.internal("texture/fist_left.png"));
             fistTopTex = new Texture(Gdx.files.internal("texture/fist_top.png"));
+            childTexture = new Texture(Gdx.files.internal("texture/child.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
             Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
             runningStringTR = TextureRegion.split(runningStringTex, 32, 32); //156 x 4 tiles (normal + glithed versions)
