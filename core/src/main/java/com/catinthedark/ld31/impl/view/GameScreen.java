@@ -104,8 +104,23 @@ public class GameScreen extends Screen<RenderShared> {
 
 
                 batch.begin();
-                batch.draw(Assets.textures.fistTopTex, shared.lastMouseX - OFFSET_X, 600);
-                batch.draw(Assets.textures.fistLeftTex, 0, OFFSET_Y - shared.lastMouseY);
+                if(shared.dedFistAttackCol != null){
+                    System.out.println("here");
+                    boolean res = shared.dedFistAttackCol.render(batch);
+                    if(!res)
+                        shared.dedFistAttackCol = null;
+                }else {
+                    System.out.println("here!");
+                    batch.draw(Assets.textures.fistTopTex, shared.lastMouseX - OFFSET_X, 600);
+                }
+                if(shared.dedFistAttackRow != null){
+                    System.out.println("there");
+                    boolean res = shared.dedFistAttackRow.render(batch);
+                    if(!res)
+                        shared.dedFistAttackRow = null;
+                }else {
+                    batch.draw(Assets.textures.fistLeftTex, 0, OFFSET_Y - shared.lastMouseY);
+                }
                 batch.end();
 
 //                System.out.println(noise.getLog());

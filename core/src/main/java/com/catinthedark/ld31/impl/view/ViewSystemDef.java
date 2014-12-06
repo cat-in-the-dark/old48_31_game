@@ -38,12 +38,18 @@ public class ViewSystemDef extends AbstractSystemDef {
 
         void handleDaddyAttack(DaddyAttack attack) {
             System.out.println("View:" + attack);
-            if (attack.direction == AttackDirection.BY_COL)
-                renderShared.colAttack = RenderFactory.createColAttack(renderShared, (int) attack
+            if (attack.direction == AttackDirection.BY_COL) {
+//                renderShared.colAttack = RenderFactory.createColAttack(renderShared, (int) attack
+//                    .pos.x);
+                renderShared.dedFistAttackCol = RenderFactory.createDedFistCol(renderShared, (int) attack
                     .pos.x);
-            else
-                renderShared.rowAttack = RenderFactory.createRowAttack(renderShared, (int) attack
+            }
+            else {
+//                renderShared.rowAttack = RenderFactory.createRowAttack(renderShared, (int) attack
+//                    .pos.y);
+                renderShared.dedFistAttackRow = RenderFactory.createDedFistRow(renderShared,(int) attack
                     .pos.y);
+            }
         }
     }
 
