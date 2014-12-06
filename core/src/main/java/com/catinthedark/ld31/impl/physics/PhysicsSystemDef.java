@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.DirectionX;
 import com.catinthedark.ld31.impl.common.GameShared;
+import com.catinthedark.ld31.impl.message.BlockCreateReq;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Port;
@@ -19,12 +20,14 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         handlePlayerMove = asyncPort(sys::handlePlayerMove);
         handlePlayerJump = asyncPort(sys::handlePlayerJump);
         handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
+        onCreateBlock = asyncPort(sys::createBlock);
     }
 
     private final Sys sys;
     public final Port<DirectionX> handlePlayerMove;
     public final Port<DaddyAttack> handleDaddyAttack;
     public final Port<Nothing> handlePlayerJump;
+    public final Port<BlockCreateReq> onCreateBlock;
 
     private class Sys {
         Sys(GameShared gameShared){
@@ -52,6 +55,10 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void handleDaddyAttack(DaddyAttack attack){
             System.out.println("Physics:" + attack);
+        }
+
+        void createBlock(BlockCreateReq req) {
+            System.out.println("Block created");
         }
     }
 }
