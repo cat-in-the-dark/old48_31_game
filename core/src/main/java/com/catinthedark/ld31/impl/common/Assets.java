@@ -23,12 +23,14 @@ public class Assets {
         public Texture fistLeftTex;
         public Texture fistTopTex;
         public Texture runningStringTex;
+        public Texture roomTex;
 
         @Override
         public void init() {
             fistLeftTex = new Texture(Gdx.files.internal("texture/fist_left.png"));
             fistTopTex = new Texture(Gdx.files.internal("texture/fist_top.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
+            roomTex = new Texture(Gdx.files.internal("texture/room.png"));
         }
     }
 
