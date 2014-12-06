@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.catinthedark.ld31.impl.common.AttackDirection;
+import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.DirectionX;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
@@ -20,6 +21,7 @@ public class InputSystemDef extends AbstractSystemDef {
     public final Pipe<Nothing> playerJump = new Pipe<>();
     public final Pipe<DaddyAttack> daddyAttack = new Pipe<>();
 
+
     public InputSystemDef() {
         sys = new Sys();
         masterDelay = 50;
@@ -27,6 +29,7 @@ public class InputSystemDef extends AbstractSystemDef {
 
 
         Gdx.input.setInputProcessor(new InputAdapter() {
+
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 AttackDirection attackDir = null;
@@ -39,14 +42,16 @@ public class InputSystemDef extends AbstractSystemDef {
                         break;
                 }
                 if (attackDir != null)
-                    daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenX), attackDir));
+                    if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE))
+                        daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY + Constants.WND_HEADER_SIZE),
+                            attackDir));
 
                 return true;
             }
 
             @Override
             public boolean keyDown(int keycode) {
-                if(keycode == Input.Keys.W)
+                if (keycode == Input.Keys.W)
                     playerJump.write(Nothing.NONE);
                 return true;
             }

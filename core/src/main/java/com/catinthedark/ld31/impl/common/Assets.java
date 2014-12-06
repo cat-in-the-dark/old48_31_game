@@ -59,8 +59,16 @@ public class Assets {
 
     }
 
+    public static Audios audios = new Audios();
+    public static Textures textures = new Textures();
+    public static Fonts fonts = new Fonts();
+    public static Animations animations = new Animations();
+
 
     public static void init() {
-
+        audios.init();
+        textures.init();
+        fonts.init();
+        animations.init();
     }
 }

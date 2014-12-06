@@ -1,8 +1,11 @@
 package com.catinthedark.ld31.impl.common;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
+	public static final Rectangle GAME_RECT = new Rectangle(340, 180, 755, 520);
+	public static final int WND_HEADER_SIZE = 10;
 	public static final int EASY = 1;
 	public static final int MEDIUM = 2;
 	public static final int HARD = 3;
