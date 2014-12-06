@@ -3,9 +3,12 @@ package com.catinthedark.ld31.impl.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.lib.view.Layer;
 import com.catinthedark.ld31.lib.view.Screen;
+
+import java.util.Random;
 
 /**
  * Created by over on 06.12.14.
@@ -28,6 +31,10 @@ public class GameScreen extends Screen<RenderShared> {
             }
         }, new Layer<RenderShared>() {
             final SpriteBatch batch = new SpriteBatch();
+            final SpriteBatch attacksBatch = new SpriteBatch();
+            final ShaderProgram noise = new ShaderProgram(Gdx.files.internal("noise.vert").readString(),
+                Gdx.files.internal("noise.frag").readString());
+            final Random rand = new Random();
             @Override
             public void render(RenderShared shared) {
                 batch.begin();
@@ -35,14 +42,30 @@ public class GameScreen extends Screen<RenderShared> {
                 batch.draw(Assets.textures.fistLeftTex, 50, 630 - Gdx.input.getY());
                 batch.end();
 
+                System.out.println(noise.getLog());
+                for(String uniform : noise.getUniforms())
+                    System.out.println(uniform);
+                noise.begin();
+                noise.setUniformf("time", rand.nextFloat());
+                noise.end();
+                attacksBatch.setShader(noise);
+
                 if(shared.colAttack != null){
-                    boolean res = shared.colAttack.render(null);
+
+                    attacksBatch.begin();
+                    boolean res = shared.colAttack.render(attacksBatch);
+                    attacksBatch.end();
                     if(!res)
                         shared.colAttack = null;
                 }
 
                 if(shared.rowAttack != null){
-                    boolean res = shared.rowAttack.render(null);
+                    noise.begin();
+                    noise.setUniformf("factor", 600);
+                    noise.end();
+                    attacksBatch.begin();
+                    boolean res = shared.rowAttack.render(attacksBatch);
+                    attacksBatch.end();
                     if(!res)
                         shared.rowAttack = null;
                 }
