@@ -2,6 +2,7 @@ package com.catinthedark.ld31.impl.view;
 
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
+import com.catinthedark.ld31.lib.view.ScreenManager;
 
 /**
  * Created by over on 06.12.14.
@@ -16,13 +17,16 @@ public class ViewSystemDef extends AbstractSystemDef {
 
     private class Sys {
         Sys(GameShared gameShared) {
-            this.gameShared = gameShared;
+            renderShared = new RenderShared();
+            renderShared.gameShared = gameShared;
         }
 
-        final GameShared gameShared;
+        final RenderShared renderShared;
+        final ScreenManager<RenderShared> screenManager = new ScreenManager<>(new GameScreen());
 
         void render(float delay) {
-            System.out.println("View: ppos.x = " + gameShared.pPos.get().x);
+            renderShared.delay  = delay;
+            screenManager.render(renderShared);
         }
     }
 
