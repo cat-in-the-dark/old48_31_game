@@ -1,6 +1,7 @@
 package com.catinthedark.ld31.impl.physics;
 
 import com.badlogic.gdx.math.Vector2;
+import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.DirectionX;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
@@ -15,10 +16,12 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         sys = new Sys(gameShared);
         updater(sys::update);
         handlePlayerMove = asyncPort(sys::handlePlayerMove);
+        handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
     }
 
     private final Sys sys;
     public final Port<DirectionX> handlePlayerMove;
+    public final Port<DaddyAttack> handleDaddyAttack;
 
     private class Sys {
         Sys(GameShared gameShared){
@@ -38,6 +41,10 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             } else {
                 pPos.x += 5;
             }
+        }
+
+        void handleDaddyAttack(DaddyAttack attack){
+            System.out.println("Physics:" + attack);
         }
     }
 }

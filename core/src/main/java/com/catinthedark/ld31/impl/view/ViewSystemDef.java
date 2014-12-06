@@ -1,7 +1,9 @@
 package com.catinthedark.ld31.impl.view;
 
+import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
+import com.catinthedark.ld31.lib.io.Port;
 import com.catinthedark.ld31.lib.view.ScreenManager;
 
 /**
@@ -11,9 +13,11 @@ public class ViewSystemDef extends AbstractSystemDef {
     public ViewSystemDef(GameShared gameShared) {
         sys = new Sys(gameShared);
         updater(sys::render);
+        handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
     }
 
     final Sys sys;
+    public final Port<DaddyAttack> handleDaddyAttack;
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -27,6 +31,10 @@ public class ViewSystemDef extends AbstractSystemDef {
         void render(float delay) {
             renderShared.delay  = delay;
             screenManager.render(renderShared);
+        }
+
+        void handleDaddyAttack(DaddyAttack attack){
+            System.out.println("View:" + attack);
         }
     }
 
