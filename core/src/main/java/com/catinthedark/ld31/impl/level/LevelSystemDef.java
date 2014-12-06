@@ -23,6 +23,10 @@ public class LevelSystemDef extends AbstractSystemDef{
     final Sys sys;
     public final Pipe<BlockCreateReq> createBlock;
 
+    public LevelMatrix.View levelView() {
+        return sys.matrix.view;
+    }
+
     private class Sys {
         final LevelMatrix matrix;
         final GameShared gameShared;

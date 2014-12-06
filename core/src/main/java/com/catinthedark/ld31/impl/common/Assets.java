@@ -3,6 +3,7 @@ package com.catinthedark.ld31.impl.common;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
     private interface Initable {
@@ -22,14 +23,15 @@ public class Assets {
 
         public Texture fistLeftTex;
         public Texture fistTopTex;
-        public Texture runningStringTex;
+        public TextureRegion[][] runningStringTR;
         public Texture roomTex;
 
         @Override
         public void init() {
             fistLeftTex = new Texture(Gdx.files.internal("texture/fist_left.png"));
             fistTopTex = new Texture(Gdx.files.internal("texture/fist_top.png"));
-            runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
+            Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
+            runningStringTR = TextureRegion.split(runningStringTex, 32, 32); //156 x 4 tiles (normal + glithed versions)
             roomTex = new Texture(Gdx.files.internal("texture/room.png"));
         }
     }

@@ -24,13 +24,14 @@ public class Ld31 extends ApplicationAdapter {
         InputSystemDef inputSystem = new InputSystemDef();
         PhysicsSystemDef physicsSystem = new PhysicsSystemDef(gameShared);
         LevelSystemDef levelSystem = new LevelSystemDef(gameShared);
-        ViewSystemDef viewSystem = new ViewSystemDef(gameShared);
+        ViewSystemDef viewSystem = new ViewSystemDef(gameShared, levelSystem.levelView());
 
         inputSystem.playerMove.connect(physicsSystem.handlePlayerMove);
         inputSystem.daddyAttack.connect(physicsSystem.handleDaddyAttack, viewSystem
             .handleDaddyAttack);
         inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
         levelSystem.createBlock.connect(physicsSystem.onCreateBlock);
+        inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
 
         Launcher.inThread(inputSystem);
         Launcher.inThread(physicsSystem);
