@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.catinthedark.ld31.impl.common.Assets;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.catinthedark.ld31.impl.common.Constants;
+import com.catinthedark.ld31.impl.level.LevelBlock;
 import com.catinthedark.ld31.lib.view.Layer;
 import com.catinthedark.ld31.lib.view.Screen;
 
@@ -20,6 +23,24 @@ public class GameScreen extends Screen<RenderShared> {
             @Override
             public void render(RenderShared shared) {
                 //System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
+                final SpriteBatch batch = new SpriteBatch();
+                batch.setProjectionMatrix(shared.camera.combined);
+                batch.begin();
+                shared.levelView.forEach(row -> {
+                    for (LevelBlock block : row) {
+                        if (block != null) {
+                            TextureRegion tex = null;
+                            switch (block.type) {
+                                case NORMAL:
+                                    tex = Assets.textures.runningStringTR[0][0];
+                                case EMPTY:
+                                    break;
+                            }
+                            batch.draw(tex, block.x - Constants.BLOCK_WIDTH * 32 / 2, block.y - Constants.BLOCK_HEIGHT * 32 / 2);
+                        }
+                    }
+                });
+                batch.end();
             }
         }, new Layer<RenderShared>() {
             final SpriteBatch batch = new SpriteBatch();

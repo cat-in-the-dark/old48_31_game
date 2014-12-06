@@ -22,16 +22,18 @@ public class Assets {
     public static class Textures implements Initable {
 
         public Texture fistLeftTex;
-        public TextureRegion fistTopTex;
+        public Texture fistTopTex;
         public Texture runningStringTex;
+        public TextureRegion[][] runningStringTR;
         public Texture roomTex;
 
         @Override
         public void init() {
             fistLeftTex = new Texture(Gdx.files.internal("texture/fist_left.png"));
-            fistTopTex = new TextureRegion(fistLeftTex);
-            fistTopTex.flip(false, true);
+            fistTopTex = new Texture(Gdx.files.internal("texture/fist_top.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
+            Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
+            runningStringTR = TextureRegion.split(runningStringTex, 32, 32); //156 x 4 tiles (normal + glithed versions)
             roomTex = new Texture(Gdx.files.internal("texture/room.png"));
         }
     }

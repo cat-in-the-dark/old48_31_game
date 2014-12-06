@@ -17,6 +17,7 @@ import com.catinthedark.ld31.lib.io.Pipe;
  */
 public class InputSystemDef extends AbstractSystemDef {
     final Sys sys;
+    public final Pipe<Nothing> onGameStart = new Pipe<>();
     public final Pipe<DirectionX> playerMove = new Pipe<>();
     public final Pipe<Nothing> playerJump = new Pipe<>();
     public final Pipe<DaddyAttack> daddyAttack = new Pipe<>();
@@ -45,7 +46,6 @@ public class InputSystemDef extends AbstractSystemDef {
                     if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE))
                         daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY + Constants.WND_HEADER_SIZE),
                             attackDir));
-
                 return true;
             }
 
