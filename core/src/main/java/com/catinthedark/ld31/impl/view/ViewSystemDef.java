@@ -1,5 +1,7 @@
 package com.catinthedark.ld31.impl.view;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.catinthedark.ld31.impl.common.AttackDirection;
 import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.GameShared;
@@ -34,6 +36,20 @@ public class ViewSystemDef extends AbstractSystemDef {
         void render(float delay) {
             renderShared.delay = delay;
             screenManager.render(renderShared);
+            _cameraMove();
+        }
+
+        void _cameraMove() {
+            Vector2 ppos = renderShared.gameShared.pPos.get();
+            Vector3 camPos = renderShared.camera.position;
+            float distance = ppos.x * 32 - camPos.x;
+            System.out.println("PLR: " + ppos.x * 32);
+            System.out.println("CAM: " + camPos.x);
+
+            if (distance > 128) {
+                renderShared.camera.position.set(camPos.x + 5, camPos.y, camPos.z);
+                renderShared.camera.update();
+            }
         }
 
         void handleDaddyAttack(DaddyAttack attack) {
