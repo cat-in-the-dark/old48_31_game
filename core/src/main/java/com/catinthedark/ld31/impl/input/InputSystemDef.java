@@ -8,6 +8,7 @@ import com.catinthedark.ld31.impl.common.AttackDirection;
 import com.catinthedark.ld31.impl.common.DaddyAttack;
 import com.catinthedark.ld31.impl.common.DirectionX;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
+import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Pipe;
 
 /**
@@ -16,12 +17,14 @@ import com.catinthedark.ld31.lib.io.Pipe;
 public class InputSystemDef extends AbstractSystemDef {
     final Sys sys;
     public final Pipe<DirectionX> playerMove = new Pipe<>();
+    public final Pipe<Nothing> playerJump = new Pipe<>();
     public final Pipe<DaddyAttack> daddyAttack = new Pipe<>();
 
     public InputSystemDef() {
         sys = new Sys();
         masterDelay = 50;
         updater(sys::pollMove);
+
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -40,6 +43,13 @@ public class InputSystemDef extends AbstractSystemDef {
 
                 return true;
             }
+
+            @Override
+            public boolean keyDown(int keycode) {
+                if(keycode == Input.Keys.W)
+                    playerJump.write(Nothing.NONE);
+                return true;
+            }
         });
 
     }
@@ -53,8 +63,7 @@ public class InputSystemDef extends AbstractSystemDef {
                 playerMove.write(DirectionX.LEFT);
             if (Gdx.input.isKeyPressed(Input.Keys.D))
                 playerMove.write(DirectionX.RIGHT);
-            if (Gdx.input.isKeyPressed(Input.Keys.W))
-                System.out.println("jump");
         }
+
     }
 }

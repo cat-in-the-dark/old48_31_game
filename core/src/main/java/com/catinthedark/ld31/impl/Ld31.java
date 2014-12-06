@@ -27,6 +27,7 @@ public class Ld31 extends ApplicationAdapter {
         inputSystem.playerMove.connect(physicsSystem.handlePlayerMove);
         inputSystem.daddyAttack.connect(physicsSystem.handleDaddyAttack, viewSystem
             .handleDaddyAttack);
+        inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
 
         Launcher.inThread(inputSystem);
         Launcher.inThread(physicsSystem);

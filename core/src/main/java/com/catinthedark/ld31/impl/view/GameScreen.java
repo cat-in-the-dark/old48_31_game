@@ -22,7 +22,7 @@ public class GameScreen extends Screen<RenderShared> {
         }, new Layer<RenderShared>() {
             @Override
             public void render(RenderShared shared) {
-                System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
+                //System.out.println("pPos.x = " + shared.gameShared.pPos.get().x);
             }
         });
     }
