@@ -15,5 +15,9 @@ public class RenderShared {
     public GameShared gameShared;
     public Renderable rowAttack;
     public Renderable colAttack;
+    public Renderable dedFistAttackRow;
+    public Renderable dedFistAttackCol;
     public LevelMatrix.View levelView = null;
+    int lastMouseX = 0;
+    int lastMouseY = 0;
 }

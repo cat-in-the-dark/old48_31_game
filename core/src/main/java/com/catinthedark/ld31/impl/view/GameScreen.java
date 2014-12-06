@@ -3,9 +3,9 @@ package com.catinthedark.ld31.impl.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.catinthedark.ld31.impl.common.Assets;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.level.LevelBlock;
 import com.catinthedark.ld31.lib.view.Layer;
@@ -56,16 +56,42 @@ public class GameScreen extends Screen<RenderShared> {
             final ShaderProgram noise = new ShaderProgram(Gdx.files.internal("noise.vert").readString(),
                 Gdx.files.internal("noise.frag").readString());
             final Random rand = new Random();
+
+            final float OFFSET_X = 140;
+            final float OFFSET_Y = 610;
+
+            int validX1 = 470;
+            int validX2 = 1000;
+            int validY1 = 280;
+            int validY2 = 570;
+            //final Rectangle validRect = new Rectangle(470,280, 705, 470);
+
             @Override
             public void render(RenderShared shared) {
+                if(Gdx.input.getX() >= validX1 && Gdx.input.getX() <= validX2)
+                    shared.lastMouseX = Gdx.input.getX();
+                else if(Gdx.input.getX() < validX1)
+                    shared.lastMouseX = validX1;
+                else if(Gdx.input.getX() > validX2)
+                    shared.lastMouseX = validX2;
+
+                if(Gdx.input.getY() >= validY1 && Gdx.input.getY() <= validY2)
+                    shared.lastMouseY = Gdx.input.getY();
+                else if(Gdx.input.getY() < validY1)
+                    shared.lastMouseY = validY1;
+                else if(Gdx.input.getY() > validY2)
+                    shared.lastMouseY = validY2;
+
+
+
                 batch.begin();
-                batch.draw(Assets.textures.fistTopTex, Gdx.input.getX() - 50, 600);
-                batch.draw(Assets.textures.fistLeftTex, 50, 630 - Gdx.input.getY());
+                batch.draw(Assets.textures.fistTopTex, shared.lastMouseX - OFFSET_X, 600);
+                batch.draw(Assets.textures.fistLeftTex, 0, OFFSET_Y - shared.lastMouseY);
                 batch.end();
 
-                System.out.println(noise.getLog());
-                for(String uniform : noise.getUniforms())
-                    System.out.println(uniform);
+//                System.out.println(noise.getLog());
+//                for(String uniform : noise.getUniforms())
+//                    System.out.println(uniform);
                 noise.begin();
                 noise.setUniformf("time", rand.nextFloat());
                 noise.end();

@@ -46,4 +46,41 @@ public class RenderFactory {
             }
         };
     }
+
+    public static Renderable createDedFistRow(RenderShared renderShared, int x) {
+        System.out.println("create col attack at " + x);
+        return new Renderable() {
+            float ATTACK_TIME = 0.3f;
+            float stateTime = 0;
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+            @Override
+            public boolean render(SpriteBatch batch) {
+//                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//                shapeRenderer.rect(x - x % 32, 0, 32, 768);
+//                shapeRenderer.end();
+                batch.draw(Assets.textures.runningStringTex, x - x % 32, 0, 32, 768);
+                stateTime += renderShared.delay;
+                return stateTime < ATTACK_TIME;
+            }
+        };
+    }
+    public static Renderable createDedFistCol(RenderShared renderShared, int x) {
+        System.out.println("create col attack at " + x);
+        return new Renderable() {
+            float ATTACK_TIME = 0.3f;
+            float stateTime = 0;
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+            @Override
+            public boolean render(SpriteBatch batch) {
+//                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//                shapeRenderer.rect(x - x % 32, 0, 32, 768);
+//                shapeRenderer.end();
+                batch.draw(Assets.textures.runningStringTex, x - x % 32, 0, 32, 768);
+                stateTime += renderShared.delay;
+                return stateTime < ATTACK_TIME;
+            }
+        };
+    }
 }
