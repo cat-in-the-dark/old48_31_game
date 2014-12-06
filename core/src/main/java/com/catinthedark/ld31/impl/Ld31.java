@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.input.InputSystemDef;
+import com.catinthedark.ld31.impl.level.LevelSystemDef;
 import com.catinthedark.ld31.impl.physics.PhysicsSystemDef;
 import com.catinthedark.ld31.impl.view.ViewSystemDef;
 import com.catinthedark.ld31.lib.run.CallbackRunner;
@@ -22,6 +23,7 @@ public class Ld31 extends ApplicationAdapter {
         GameShared gameShared = new GameShared();
         InputSystemDef inputSystem = new InputSystemDef();
         PhysicsSystemDef physicsSystem = new PhysicsSystemDef(gameShared);
+        LevelSystemDef levelSystem = new LevelSystemDef(gameShared);
         ViewSystemDef viewSystem = new ViewSystemDef(gameShared);
 
         inputSystem.playerMove.connect(physicsSystem.handlePlayerMove);
@@ -31,6 +33,7 @@ public class Ld31 extends ApplicationAdapter {
 
         Launcher.inThread(inputSystem);
         Launcher.inThread(physicsSystem);
+        Launcher.inThread(levelSystem);
         callbackRunner = Launcher.viaCallback(viewSystem);
     }
 
