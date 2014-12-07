@@ -1,5 +1,6 @@
 package com.catinthedark.ld31.impl.level;
 
+import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.common.GameState;
 import com.catinthedark.ld31.impl.message.BlockCreateReq;
@@ -60,6 +61,9 @@ public class LevelSystemDef extends AbstractSystemDef{
 
         void onGameStart(Nothing nothing){
             state = GameState.IN_GAME;
+            Assets.audios.noise_background.setVolume(0.5f);
+            Assets.audios.noise_background.setLooping(true);
+            Assets.audios.noise_background.play();
         }
 
         public void addPreset() {

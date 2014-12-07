@@ -35,6 +35,7 @@ public class BodyFactory {
     }
 
     public static Body createPlayer(World world){
+        // TODO: add 2 more shapes on the left and right sides of player with friction = 0 to make player slide across walls sides
         CircleShape playerShape = new CircleShape();
         playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
         BodyDef bodyDef = new BodyDef();

@@ -14,7 +14,6 @@ import java.util.Map;
 public class RenderFactory {
     public static Renderable createRowAttack(RenderShared renderShared, int y) {
         return new Renderable() {
-            float ATTACK_TIME = 0.3f;
             float stateTime = 0;
             float topSurface = 720;
             ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -27,7 +26,7 @@ public class RenderFactory {
 //                shapeRenderer.end();
                 int yy = y + (int) Constants.GAME_RECT.getY();
                 batch.draw(Assets.textures.runningStringTex, 0,topSurface - yy - yy % 32, 1366, 32);
-                return stateTime < ATTACK_TIME;
+                return stateTime < Constants.ATTACK_TIME;
             }
         };
     }
@@ -35,7 +34,6 @@ public class RenderFactory {
     public static Renderable createColAttack(RenderShared renderShared, int x) {
         System.out.println("create col attack at " + x);
         return new Renderable() {
-            float ATTACK_TIME = 0.3f;
             float stateTime = 0;
             ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -48,14 +46,14 @@ public class RenderFactory {
                 int xx =(x  - x % 32) + (int) Constants.GAME_RECT.getX();
                 batch.draw(Assets.textures.runningStringTex, xx, 0, 32, 768);
                 stateTime += renderShared.delay;
-                return stateTime < ATTACK_TIME;
+                return stateTime < Constants.ATTACK_TIME;
             }
         };
     }
 
     public static Renderable createDedFistRow(RenderShared renderShared, int y) {
         return new Renderable() {
-            float ATTACK_TIME = 0.2f;
+            float ATTACK_TIME = Constants.ATTACK_TIME;
             float stateTime = 0;
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             final float OFFSET_X = 140;
@@ -79,7 +77,7 @@ public class RenderFactory {
     }
     public static Renderable createDedFistCol(RenderShared renderShared, int x) {
         return new Renderable() {
-            float ATTACK_TIME = 0.3f;
+            float ATTACK_TIME = Constants.ATTACK_TIME;
             float stateTime = 0;
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             final float OFFSET_X = 140;

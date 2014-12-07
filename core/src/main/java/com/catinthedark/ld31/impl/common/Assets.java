@@ -1,6 +1,8 @@
 package com.catinthedark.ld31.impl.common;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,9 +14,19 @@ public class Assets {
 
     public static class Audios implements Initable {
 
+        public Music noise_background;
+        public Sound hit_tv;
+        public Sound ouch_enemy;
+        public Sound ouch_noise;
+        public Sound noise_sfx;
+
         @Override
         public void init() {
-
+            noise_background = Gdx.audio.newMusic(Gdx.files.internal("sound/noise_background.mp3"));
+            hit_tv = Gdx.audio.newSound(Gdx.files.internal("sound/hit_tv.mp3"));
+            ouch_enemy = Gdx.audio.newSound(Gdx.files.internal("sound/ouch_enemy.mp3"));
+            ouch_noise = Gdx.audio.newSound(Gdx.files.internal("sound/ouch_noise.mp3"));
+            noise_sfx = Gdx.audio.newSound(Gdx.files.internal("sound/noise_sfx.mp3"));
         }
 
     }
