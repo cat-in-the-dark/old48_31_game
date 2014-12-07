@@ -2,6 +2,7 @@ package com.catinthedark.ld31.impl;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.catinthedark.ld31.impl.bots.AISystemDef;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.common.GameState;
@@ -29,6 +30,7 @@ public class Ld31 extends ApplicationAdapter {
         PhysicsSystemDef physicsSystem = new PhysicsSystemDef(gameShared);
         LevelSystemDef levelSystem = new LevelSystemDef(gameShared);
         ViewSystemDef viewSystem = new ViewSystemDef(gameShared, levelSystem.levelView());
+        AISystemDef aiSystem = new AISystemDef(gameShared);
 
         inputSystem.playerMove.connect(physicsSystem.handlePlayerMove);
         inputSystem.daddyAttack.connect(physicsSystem.handleDaddyAttack, viewSystem
@@ -46,11 +48,17 @@ public class Ld31 extends ApplicationAdapter {
 
         physicsSystem.blockDestroyed.connect(levelSystem.blockDestroyed);
 
-        levelSystem.createJumper.connect(physicsSystem.createJumper, viewSystem.createJumper);
-        levelSystem.createWalker.connect(physicsSystem.createWalker, viewSystem.createWalker);
-        levelSystem.createShooter.connect(physicsSystem.createShooter, viewSystem.createShooter);
+        levelSystem.createJumper.connect(physicsSystem.createJumper, viewSystem.createJumper,
+            aiSystem.createJumper);
+        levelSystem.createWalker.connect(physicsSystem.createWalker, viewSystem.createWalker,
+            aiSystem.createWalker);
+        levelSystem.createShooter.connect(physicsSystem.createShooter, viewSystem.createShooter,
+            aiSystem.createShooter);
+
+        aiSystem.jumperJump.connect(physicsSystem.jumperJump);
 
         Launcher.inThread(inputSystem);
+        Launcher.inThread(aiSystem);
         //Launcher.inThread(physicsSystem);
         //Launcher.inThread(levelSystem);
         callbackRunner = Launcher.viaCallback(viewSystem, physicsSystem, levelSystem);

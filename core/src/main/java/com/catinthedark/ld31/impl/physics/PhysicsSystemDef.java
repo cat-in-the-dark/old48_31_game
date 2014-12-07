@@ -33,6 +33,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
         onCreateBlock = asyncPort(sys::createBlock);
         createJumper = serialPort(sys::createJumper);
+        jumperJump = asyncPort(sys::jumperJump);
         createWalker = serialPort(sys::createShooter);
         createShooter = serialPort(sys::createWalker);
         onGameStart = serialPort(sys::onGameStart);
@@ -43,6 +44,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<DaddyAttack> handleDaddyAttack;
     public final Port<BlockCreateReq> onCreateBlock;
     public final Port<Integer> createJumper;
+    public final Port<Integer> jumperJump;
     public final Port<Integer> createWalker;
     public final Port<Integer> createShooter;
     public final Port<Nothing> handlePlayerJump;
@@ -68,7 +70,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         public Map<Integer, Body> shooters = new HashMap<>();
 
         void update(float delta) {
-            world.step(delta, 6, 10);
+            world.step(delta, 6, 100);
             gameShared.pPos.update((pos) -> pos.set(playerBody.getPosition()));
             if (playerBody.getLinearVelocity().y == 0 && oldYVelocity == 0) {
                 canJump = true;
@@ -199,6 +201,24 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         }
         void createShooter(Integer id) {
             shooters.put(id, BodyFactory.createShooter(world, gameShared.shooters.map(id)));
+        }
+
+        void jumperJump(Integer id){
+            Body jBody = jumpers.get(id);
+            if(jBody.getLinearVelocity().y != 0)
+                return;
+
+            Vector2 jVec = null;
+            if(playerBody.getPosition().x > jBody.getPosition().x)
+                jVec = Constants.JUMP_IMPULSE_PEDO_RIGHT;
+            else
+                jVec = Constants.JUMP_IMPULSE_PEDO_LEFT;
+            jBody.applyLinearImpulse(jVec.cpy().scl(0.5f), new
+                Vector2(0, 0), true);
+        }
+
+        void walkerGo(){
+            
         }
     }
 }
