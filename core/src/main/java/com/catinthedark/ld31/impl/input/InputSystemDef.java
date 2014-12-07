@@ -124,8 +124,9 @@ public class InputSystemDef extends AbstractSystemDef {
 
                 if (keycode == Input.Keys.ESCAPE) {
                     if(sys.state == GameState.GAME_OVER) {
-                        sys.state = GameState.IN_GAME;
-                        onGameStart.write(Nothing.NONE);
+//                        sys.state = GameState.IN_GAME;
+//                        onGameStart.write(Nothing.NONE);
+                        System.exit(0);
                     }
                 }
                 return true;
