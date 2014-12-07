@@ -8,6 +8,9 @@ import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Pipe;
 import com.catinthedark.ld31.lib.io.Port;
+
+import java.util.Random;
+
 import static com.catinthedark.ld31.lib.util.SysUtils.conditional;
 /**
  * Created by over on 06.12.14.
@@ -25,6 +28,7 @@ public class LevelSystemDef extends AbstractSystemDef{
     final Sys sys;
     public final Pipe<BlockCreateReq> createBlock;
     public final Port<Nothing> onGameStart;
+    private final Random rand = new Random();
 
     public LevelMatrix.View levelView() {
         return sys.matrix.view;
@@ -55,17 +59,20 @@ public class LevelSystemDef extends AbstractSystemDef{
         }
 
         public void addPreset() {
-            LevelMatrix.ColMapper mapper = matrix.nextCol();
-            BlockType[] col = new BlockType[]{BlockType.NORMAL, BlockType.NORMAL, BlockType.EMPTY};
-            for (int y = 0; y < col.length; y++) {
-                BlockType block = col[y];
-                if (block == BlockType.EMPTY) {
-                    continue;
+            Preset preset = Preset.presets[rand.nextInt(Preset.presets.length)];
+
+            for (BlockType[] col : preset.blocks) {
+                LevelMatrix.ColMapper mapper = matrix.nextCol();
+                for (int y = 0; y < col.length; y++) {
+                    BlockType block = col[y];
+                    if (block == BlockType.EMPTY) {
+                        continue;
+                    }
+                    mapper.setCell(y, block.at(blockIdSeq, currentX, y * 32));
+                    createBlock.write(new BlockCreateReq(blockIdSeq, block, currentX / 32, y));
                 }
-                mapper.setCell(y, block.at(blockIdSeq, currentX, y * 32));
-                createBlock.write(new BlockCreateReq(blockIdSeq, block, currentX / 32, y));
+                currentX += 32;
             }
-            currentX += 32;
         }
 
     }

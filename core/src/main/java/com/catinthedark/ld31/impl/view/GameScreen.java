@@ -44,9 +44,14 @@ public class GameScreen extends Screen<RenderShared> {
                         if (block != null) {
                             TextureRegion tex = null;
                             switch (block.type) {
-                                case NORMAL:
-                                    tex = Assets.textures.runningStringTR[block.y == 0 ? 1 : 0][
+                                case BOTTOM:
+                                    tex = Assets.textures.runningStringTR[1][
                                         (block.x / 32) % Assets.textures.runningStringTR[0].length];
+                                    break;
+                                case TOP:
+                                    tex = Assets.textures.runningStringTR[0][
+                                            (block.x / 32) % Assets.textures.runningStringTR[0].length];
+                                    break;
                                 case EMPTY:
                                     break;
                             }

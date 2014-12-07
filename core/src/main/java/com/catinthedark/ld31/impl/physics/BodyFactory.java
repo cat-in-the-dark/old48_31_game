@@ -20,7 +20,8 @@ public class BodyFactory {
         Fixture blockFixture = null;
 
         switch (type) {
-            case NORMAL:
+            case BOTTOM:
+            case TOP:
                 blockShape = new PolygonShape();
                 blockShape.setAsBox(Constants.BLOCK_WIDTH / 2, Constants.BLOCK_HEIGHT / 2);
                 blockFixture = blockBody.createFixture(blockShape, 0);
