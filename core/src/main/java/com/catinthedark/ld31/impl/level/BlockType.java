@@ -6,8 +6,9 @@ import java.util.stream.Stream;
  * Created by kirill on 06.12.14.
  */
 public enum BlockType {
-    NORMAL(0, true),
-    EMPTY(1, false);
+    EMPTY(0, false),
+    BOTTOM(1, true),
+    TOP(2, true);
 
     public int id;
     public boolean collidable;
