@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
@@ -29,6 +30,10 @@ public class GameScreen extends Screen<RenderShared> {
                     (int)Constants.GAME_RECT.width,
                     (int)Constants.GAME_RECT.height,
                     false);
+            final ShaderProgram scanlineShader = new ShaderProgram(Gdx.files.internal("scanline.vert").readString(),
+                Gdx.files.internal("scanline.frag").readString());
+
+
 
             @Override
             public void render(RenderShared shared) {
@@ -57,20 +62,20 @@ public class GameScreen extends Screen<RenderShared> {
                 Vector2 pPos = shared.gameShared.pPos.get();
                 batch.draw(Assets.textures.childTexture, pPos.x * 32 - 16, pPos.y * 32 - 16);
                 batch.end();
+
+
+
                 fbo.end();
                 TextureRegion reg = new TextureRegion(fbo.getColorBufferTexture());
                 reg.flip(false, true);
+                System.out.println("height:" + reg.getRegionHeight());
+                scanlineShader.begin();
+                scanlineShader.setUniformf("resolution", reg.getRegionWidth(), reg.getRegionHeight());
+                scanlineShader.end();
+                fboBatch.setShader(scanlineShader);
                 fboBatch.begin();
                 fboBatch.draw(reg, Constants.GAME_RECT.x, 768 - Constants.GAME_RECT.y - Constants.GAME_RECT.height);
                 fboBatch.end();
-            }
-        }, new Layer<RenderShared>() {
-            final SpriteBatch batch = new SpriteBatch();
-            @Override
-            public void render(RenderShared shared) {
-                batch.begin();
-                batch.draw(Assets.textures.roomTex, 0, 0);
-                batch.end();
             }
         }, new Layer<RenderShared>() {
             final SpriteBatch batch = new SpriteBatch();
@@ -79,8 +84,6 @@ public class GameScreen extends Screen<RenderShared> {
                 Gdx.files.internal("noise.frag").readString());
             final Random rand = new Random();
 
-            final float OFFSET_X = 140;
-            final float OFFSET_Y = 610;
 
             int validX1 = 470;
             int validX2 = 1000;
@@ -104,27 +107,6 @@ public class GameScreen extends Screen<RenderShared> {
                 else if(Gdx.input.getY() > validY2)
                     shared.lastMouseY = validY2;
 
-
-
-                batch.begin();
-                if(shared.dedFistAttackCol != null){
-                    System.out.println("here");
-                    boolean res = shared.dedFistAttackCol.render(batch);
-                    if(!res)
-                        shared.dedFistAttackCol = null;
-                }else {
-                    System.out.println("here!");
-                    batch.draw(Assets.textures.fistTopTex, shared.lastMouseX - OFFSET_X, 600);
-                }
-                if(shared.dedFistAttackRow != null){
-                    System.out.println("there");
-                    boolean res = shared.dedFistAttackRow.render(batch);
-                    if(!res)
-                        shared.dedFistAttackRow = null;
-                }else {
-                    batch.draw(Assets.textures.fistLeftTex, 0, OFFSET_Y - shared.lastMouseY);
-                }
-                batch.end();
 
 //                System.out.println(noise.getLog());
 //                for(String uniform : noise.getUniforms())
@@ -153,6 +135,37 @@ public class GameScreen extends Screen<RenderShared> {
                     if(!res)
                         shared.rowAttack = null;
                 }
+
+            }
+        }, new Layer<RenderShared>() {
+            final SpriteBatch batch = new SpriteBatch();
+            final float OFFSET_X = 140;
+            final float OFFSET_Y = 610;
+
+            @Override
+            public void render(RenderShared shared) {
+                batch.begin();
+                batch.draw(Assets.textures.roomTex, 0, 0);
+                batch.end();
+                batch.begin();
+                if(shared.dedFistAttackCol != null){
+                    System.out.println("here");
+                    boolean res = shared.dedFistAttackCol.render(batch);
+                    if(!res)
+                        shared.dedFistAttackCol = null;
+                }else {
+                    System.out.println("here!");
+                    batch.draw(Assets.textures.fistTopTex, shared.lastMouseX - OFFSET_X, 600);
+                }
+                if(shared.dedFistAttackRow != null){
+                    System.out.println("there");
+                    boolean res = shared.dedFistAttackRow.render(batch);
+                    if(!res)
+                        shared.dedFistAttackRow = null;
+                }else {
+                    batch.draw(Assets.textures.fistLeftTex, 0, OFFSET_Y - shared.lastMouseY);
+                }
+                batch.end();
             }
         });
     }

@@ -43,8 +43,6 @@ public class ViewSystemDef extends AbstractSystemDef {
             Vector2 ppos = renderShared.gameShared.pPos.get();
             Vector3 camPos = renderShared.camera.position;
             float distance = ppos.x * 32 - camPos.x;
-            System.out.println("PLR: " + ppos.x * 32);
-            System.out.println("CAM: " + camPos.x);
 
             if (distance > 128) {
                 renderShared.camera.position.set(camPos.x + 5, camPos.y, camPos.z);
