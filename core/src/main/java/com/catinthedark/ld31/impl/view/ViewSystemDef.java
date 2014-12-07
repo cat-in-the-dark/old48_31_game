@@ -77,8 +77,8 @@ public class ViewSystemDef extends AbstractSystemDef {
             Vector3 camPos = renderShared.camera.position;
             float distance = ppos.x * 32 - camPos.x;
 
-            if (distance > 128) {
-                renderShared.camera.position.set(camPos.x + 5, camPos.y, camPos.z);
+            if (distance > 0) {
+                renderShared.camera.position.set(ppos.x * 32, camPos.y, camPos.z);
                 renderShared.camera.update();
                 renderShared.gameShared.cameraPosX.update(vec -> vec.x = renderShared.camera
                     .position.x);
