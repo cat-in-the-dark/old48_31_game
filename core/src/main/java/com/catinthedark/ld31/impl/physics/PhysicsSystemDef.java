@@ -49,7 +49,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<Integer> createShooter;
     public final Port<Nothing> handlePlayerJump;
     public final Port<Nothing> onGameStart;
-    public final Pipe<Long> blockDestroyed = new Pipe();
+    public final Pipe<Long> blockDestroyed = new Pipe<>();
+    public final Pipe<Integer> jumpersDestroyed = new Pipe<>(this);
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -95,6 +96,11 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 });
             });
 
+            float camPosX = gameShared.cameraPosX.get().x;
+            if (playerBody.getPosition().x * 32 + Constants.GAME_RECT.x < camPosX) {
+                playerBody.setLinearVelocity(0, playerBody.getLinearVelocity().y);
+                playerBody.getPosition().set((camPosX - Constants.GAME_RECT.x) / 32 + 1, playerBody.getPosition().y);
+            }
 
             Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
             cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
@@ -115,9 +121,13 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void handlePlayerMove(DirectionX dir) {
             if (dir == DirectionX.LEFT) {
-                if (playerBody.getLinearVelocity().x > -10)
-                    playerBody.applyLinearImpulse(Constants.WALKING_FORCE_LEFT, new Vector2(0,
-                            0), true);
+                float camPosX = gameShared.cameraPosX.get().x;
+                if (playerBody.getPosition().x * 32 + Constants.GAME_RECT.x > camPosX) {
+                    if (playerBody.getLinearVelocity().x > -10) {
+                        playerBody.applyLinearImpulse(Constants.WALKING_FORCE_LEFT, new Vector2(0,
+                                0), true);
+                    }
+                }
             } else {
                 if (playerBody.getLinearVelocity().x < 10)
                     playerBody.applyLinearImpulse(Constants.WALKING_FORCE_RIGHT, new Vector2(0,
@@ -148,18 +158,30 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 System.out.println("cam_x:" + camPosX);
                 System.out.println("attackX:" + attackX);
 
-                List<Long> forRemove = new ArrayList<>();
+                List<Long> blocksForRemove = new ArrayList<>();
                 for (Map.Entry<Long, Body> kv : blocks.entrySet()) {
                     //System.out.println("bpos:" + kv.getValue().getPosition());
                     if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
                         world.destroyBody(kv.getValue());
-                        forRemove.add(kv.getKey());
+                        blocksForRemove.add(kv.getKey());
                         blockDestroyed.write(kv.getKey());
                         System.out.println("desttoy block:" + kv.getValue().getPosition());
                     }
                 }
+                blocksForRemove.forEach((id) -> blocks.remove(id));
 
-                forRemove.forEach((id) -> blocks.remove(id));
+                List<Integer> jumpersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : jumpers.entrySet()) {
+                    if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
+                        world.destroyBody(kv.getValue());
+                        jumpersForRemove.add(kv.getKey());
+                        jumpersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.jumpers.free(kv.getKey());
+                        });
+                    }
+                }
+                jumpersForRemove.forEach((id) -> jumpers.remove((Object) id));
+
 
 //            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
 //                ().x) % ((int) Constants.GAME_RECT.width);
@@ -183,6 +205,18 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 }
 
                 forRemove.forEach((id) -> blocks.remove(id));
+
+                List<Integer> jumpersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : jumpers.entrySet()) {
+                    if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        world.destroyBody(kv.getValue());
+                        jumpersForRemove.add(kv.getKey());
+                        jumpersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.jumpers.free(kv.getKey());
+                        });
+                    }
+                }
+                jumpersForRemove.forEach((id) -> jumpers.remove((Object) id));
             }
 
         }
@@ -205,6 +239,9 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void jumperJump(Integer id){
             Body jBody = jumpers.get(id);
+            //possible deleted
+            if(jBody == null)
+                return;
             if(jBody.getLinearVelocity().y != 0)
                 return;
 

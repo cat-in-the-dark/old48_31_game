@@ -21,12 +21,14 @@ public class AISystemDef extends AbstractSystemDef {
         createJumper = serialPort(sys::createJumper);
         createShooter = serialPort(sys::createShooter);
         createWalker = serialPort(sys::createWalker);
+        destroyJumper = serialPort(sys::destroyJumper);
     }
 
     final Sys sys;
     public final Port<Integer> createJumper;
     public final Port<Integer> createShooter;
     public final Port<Integer> createWalker;
+    public final Port<Integer> destroyJumper;
     public final Pipe<Integer> jumperJump = new Pipe<>();
 
     private class Sys {
@@ -47,9 +49,9 @@ public class AISystemDef extends AbstractSystemDef {
                     System.out.println("jumper(" + jid + ") active");
                     jumper.state = Jumper.State.IN_JUMP;
                     jumperJump.write(jid);
-                    defer(()->{
+                    defer(() -> {
                         jumper.state = Jumper.State.QUIET;
-                    },500);
+                    }, 500);
 
                 }
             });
@@ -61,6 +63,10 @@ public class AISystemDef extends AbstractSystemDef {
 
         void createJumper(Integer id) {
             jumpersIds.add(id);
+        }
+
+        void destroyJumper(Integer id) {
+            jumpersIds.remove((Object) id);
         }
 
         void createShooter(Integer id) {
