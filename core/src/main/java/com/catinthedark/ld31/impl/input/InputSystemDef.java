@@ -4,13 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
-import com.catinthedark.ld31.impl.common.AttackDirection;
-import com.catinthedark.ld31.impl.common.Constants;
-import com.catinthedark.ld31.impl.common.DaddyAttack;
-import com.catinthedark.ld31.impl.common.DirectionX;
+import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Pipe;
+import com.catinthedark.ld31.lib.io.Port;
+
+import java.awt.*;
 
 /**
  * Created by over on 06.12.14.
@@ -21,12 +21,17 @@ public class InputSystemDef extends AbstractSystemDef {
     public final Pipe<DirectionX> playerMove = new Pipe<>();
     public final Pipe<Nothing> playerJump = new Pipe<>();
     public final Pipe<DaddyAttack> daddyAttack = new Pipe<>();
+    public final Port<Nothing> gotoTutorial;
+    public final Pipe<Nothing> gotoTutorial2 = new Pipe<>();
+    public final Pipe<Nothing> gotoTutorial3 = new Pipe<>();
+    public final Pipe<Nothing> gotoMenu = new Pipe<>();
 
 
     public InputSystemDef() {
         sys = new Sys();
         masterDelay = 50;
         updater(sys::pollMove);
+        gotoTutorial = serialPort(sys::gotoTutorial);
 
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -44,7 +49,8 @@ public class InputSystemDef extends AbstractSystemDef {
                 }
                 if (attackDir != null)
                     if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE))
-                        daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY + Constants.WND_HEADER_SIZE),
+                        daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY +
+                            Constants.WND_HEADER_SIZE),
                             attackDir));
                 return true;
             }
@@ -53,6 +59,36 @@ public class InputSystemDef extends AbstractSystemDef {
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.W)
                     playerJump.write(Nothing.NONE);
+
+                if (keycode == Input.Keys.ENTER) {
+                    switch (sys.state) {
+
+                        case INIT:
+                            break;
+                        case TUTORIAL1:
+                            gotoTutorial2.write(Nothing.NONE);
+                            sys.state = GameState.TUTORIAL2;
+                            break;
+                        case TUTORIAL2:
+                            gotoTutorial3.write(Nothing.NONE);
+                            sys.state = GameState.TUTORIAL3;
+                            break;
+                        case TUTORIAL3:
+                            gotoMenu.write(Nothing.NONE);
+                            sys.state = GameState.MENU;
+                            break;
+                        case MENU:
+                            onGameStart.write(Nothing.NONE);
+                            sys.state = GameState.IN_GAME;
+                            break;
+                        case IN_GAME:
+                            break;
+                        case GAME_OVER:
+                            break;
+                        case GAME_WIN:
+                            break;
+                    }
+                }
                 return true;
             }
         });
@@ -63,12 +99,19 @@ public class InputSystemDef extends AbstractSystemDef {
         Sys() {
         }
 
+        GameState state = GameState.INIT;
+
         void pollMove(float delta) {
             if (Gdx.input.isKeyPressed(Input.Keys.A))
                 playerMove.write(DirectionX.LEFT);
             if (Gdx.input.isKeyPressed(Input.Keys.D))
                 playerMove.write(DirectionX.RIGHT);
         }
+
+        void gotoTutorial(Nothing none) {
+            state = GameState.TUTORIAL1;
+        }
+
 
     }
 }

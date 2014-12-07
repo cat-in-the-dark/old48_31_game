@@ -27,6 +27,13 @@ public class Assets {
         public Texture childTexture;
         public TextureRegion[][] runningStringTR;
         public Texture roomTex;
+        public Texture logo;
+        public Texture t1;
+        public Texture t2;
+        public Texture t3;
+        public Texture menu;
+        public Texture gameWin;
+        public Texture gameOver;
 
         @Override
         public void init() {
@@ -37,6 +44,13 @@ public class Assets {
             Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
             runningStringTR = TextureRegion.split(runningStringTex, 32, 32); //156 x 4 tiles (normal + glithed versions)
             roomTex = new Texture(Gdx.files.internal("texture/room.png"));
+            logo = new Texture(Gdx.files.internal("texture/logo.png"));
+            t1 = new Texture(Gdx.files.internal("texture/t1.png"));
+            t2 = new Texture(Gdx.files.internal("texture/t2.png"));
+            t3 = new Texture(Gdx.files.internal("texture/t3.png"));
+            menu = new Texture(Gdx.files.internal("texture/menu.png"));
+            gameOver = new Texture(Gdx.files.internal("texture/gameover.png"));
+            gameWin = new Texture(Gdx.files.internal("texture/gamewin.png"));
         }
     }
 

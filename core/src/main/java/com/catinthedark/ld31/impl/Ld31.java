@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.GameShared;
+import com.catinthedark.ld31.impl.common.GameState;
 import com.catinthedark.ld31.impl.input.InputSystemDef;
 import com.catinthedark.ld31.impl.level.LevelSystemDef;
 import com.catinthedark.ld31.impl.physics.PhysicsSystemDef;
@@ -23,7 +24,7 @@ public class Ld31 extends ApplicationAdapter {
         Assets.init();
 
         GameShared gameShared = new GameShared();
-        Pipe<Nothing> gameStart = new Pipe<>();
+        Pipe<Nothing> gotoTutorial = new Pipe<>();
         InputSystemDef inputSystem = new InputSystemDef();
         PhysicsSystemDef physicsSystem = new PhysicsSystemDef(gameShared);
         LevelSystemDef levelSystem = new LevelSystemDef(gameShared);
@@ -36,7 +37,13 @@ public class Ld31 extends ApplicationAdapter {
         levelSystem.createBlock.connect(physicsSystem.onCreateBlock);
         inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
 
-        gameStart.connect(physicsSystem.onGameStart, levelSystem.onGameStart);
+        gotoTutorial.connect(inputSystem.gotoTutorial, viewSystem.gotoTutorial);
+        //gotoTutorial.connect(physicsSystem.onGameStart, levelSystem.onGameStart);
+        inputSystem.gotoTutorial2.connect(viewSystem.gotoTutorial2);
+        inputSystem.gotoTutorial3.connect(viewSystem.gotoTutorial3);
+        inputSystem.gotoMenu.connect(viewSystem.gotoMenu);
+        inputSystem.onGameStart.connect(physicsSystem.onGameStart, levelSystem.onGameStart,
+            viewSystem.onGameStart);
 
         Launcher.inThread(inputSystem);
         Launcher.inThread(physicsSystem);
@@ -46,7 +53,12 @@ public class Ld31 extends ApplicationAdapter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                gameStart.write(Nothing.NONE);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                gotoTutorial.write(Nothing.NONE);
             }
         }).start();
     }
