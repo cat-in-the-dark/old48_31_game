@@ -74,8 +74,7 @@ public class LevelSystemDef extends AbstractSystemDef {
         }
 
         public void addPreset() {
-            //Preset preset = Preset.presets[rand.nextInt(Preset.presets.length)];
-            Preset preset = Preset.presets[0];
+            Preset preset = Preset.presets[rand.nextInt(Preset.presets.length)];
 
             int presetX = currentX;
 
