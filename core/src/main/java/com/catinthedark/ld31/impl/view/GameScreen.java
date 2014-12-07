@@ -63,7 +63,6 @@ public class GameScreen extends Screen<RenderShared> {
                                     }
                                     break;
                                 case TOP:
-                                    System.out.println("TOP: " + block.y);
                                     if (block.y == 32) {
                                         tex = Assets.textures.runningStringTR[0][
                                                 (block.x / 32) % Assets.textures.runningStringTR[0].length];
