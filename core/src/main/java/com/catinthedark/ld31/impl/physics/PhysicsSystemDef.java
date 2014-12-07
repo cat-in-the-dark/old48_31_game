@@ -83,6 +83,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             gameShared.pPos.update((pos) -> pos.set(playerBody.getPosition()));
             if (playerBody.getLinearVelocity().y == 0 && oldYVelocity == 0) {
                 canJump = true;
+            } else {
+                canJump = false;
             }
             oldYVelocity = playerBody.getLinearVelocity().y;
 
@@ -120,7 +122,10 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 gameOver.write(Nothing.NONE);
                 state = GameState.GAME_OVER;
             }
-
+            if (playerBody.getPosition().y < -10) {
+                gameOver.write(Nothing.NONE);
+                state = GameState.GAME_OVER;
+            }
 
             Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
             cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
