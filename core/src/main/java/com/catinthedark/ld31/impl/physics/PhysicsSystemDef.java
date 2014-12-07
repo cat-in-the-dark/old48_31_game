@@ -275,7 +275,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             else
                 wVec = Constants.WALKING_FORCE_RIGHT;
 
-            wBody.applyLinearImpulse(wVec.cpy().scl(0.5f), new Vector2(0,0), true);
+            wBody.applyLinearImpulse(wVec.cpy().scl(0.2f), new Vector2(0,0), true);
         }
     }
 }
