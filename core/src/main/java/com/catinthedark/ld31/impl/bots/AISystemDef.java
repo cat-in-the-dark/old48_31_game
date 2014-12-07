@@ -24,6 +24,7 @@ public class AISystemDef extends AbstractSystemDef {
         createWalker = serialPort(sys::createWalker);
         destroyJumper = serialPort(sys::destroyJumper);
         destroyWalker = serialPort(sys::destroyWalker);
+        destroyShooter = serialPort(sys::destroyShooter);
     }
 
     final Sys sys;
@@ -32,6 +33,7 @@ public class AISystemDef extends AbstractSystemDef {
     public final Port<Integer> createWalker;
     public final Port<Integer> destroyJumper;
     public final Port<Integer> destroyWalker;
+    public final Port<Integer> destroyShooter;
     public final Pipe<Integer> jumperJump = new Pipe<>();
     public final Pipe<Integer> walkerGo = new Pipe<>();
 
@@ -83,6 +85,10 @@ public class AISystemDef extends AbstractSystemDef {
 
         void destroyWalker(Integer id) {
             walkersIds.remove((Object) id);
+        }
+
+        void destroyShooter(Integer id) {
+            shootersIds.remove((Object) id);
         }
 
         void createShooter(Integer id) {

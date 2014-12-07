@@ -32,9 +32,9 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         onCreateBlock = asyncPort(sys::createBlock);
         createJumper = serialPort(sys::createJumper);
         jumperJump = asyncPort(sys::jumperJump);
-        createWalker = serialPort(sys::createShooter);
+        createWalker = serialPort(sys::createWalker);
         walkerWalk = asyncPort(sys::walkerGo);
-        createShooter = serialPort(sys::createWalker);
+        createShooter = serialPort(sys::createShooter);
         onGameStart = serialPort(sys::onGameStart);
     }
 
@@ -196,6 +196,18 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 }
                 walkersForRemove.forEach((id) -> walkers.remove((Object) id));
 
+                List<Integer> shootersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : shooters.entrySet()) {
+                    if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
+                        world.destroyBody(kv.getValue());
+                        shootersForRemove.add(kv.getKey());
+                        shootersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.shooters.free(kv.getKey());
+                        });
+                    }
+                }
+                shootersForRemove.forEach((id) -> shooters.remove((Object) id));
+
 //            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
 //                ().x) % ((int) Constants.GAME_RECT.width);
 //            System.out.print("delta: " + delta);
@@ -242,6 +254,18 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                     }
                 }
                 walkersForRemove.forEach((id) -> walkers.remove((Object) id));
+
+                List<Integer> shootersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : shooters.entrySet()) {
+                    if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        world.destroyBody(kv.getValue());
+                        shootersForRemove.add(kv.getKey());
+                        shootersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.shooters.free(kv.getKey());
+                        });
+                    }
+                }
+                shootersForRemove.forEach((id) -> shooters.remove((Object) id));
             }
 
         }

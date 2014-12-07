@@ -28,6 +28,7 @@ public class ViewSystemDef extends AbstractSystemDef {
         createWalker = serialPort(sys::createWalker);
         jumperDestroyed = serialPort(sys::jumperDestroyed);
         walkerDestroyed = serialPort(sys::walkerDestroyed);
+        shooterDestroyed = serialPort(sys::shooterDestroyed);
     }
 
     final Sys sys;
@@ -42,6 +43,7 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Integer> createWalker;
     public final Port<Integer> jumperDestroyed;
     public final Port<Integer> walkerDestroyed;
+    public final Port<Integer> shooterDestroyed;
 
     private class Sys {
         Sys(GameShared gameShared, LevelMatrix2.View levelView) {
@@ -117,6 +119,10 @@ public class ViewSystemDef extends AbstractSystemDef {
 
         void walkerDestroyed(Integer id) {
             renderShared.walkerids.remove((Object) id);
+        }
+
+        void shooterDestroyed(Integer id) {
+            renderShared.shootersIds.remove((Object) id);
         }
 
         void gotoTutorial(Nothing none) {
