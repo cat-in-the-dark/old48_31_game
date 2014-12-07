@@ -15,7 +15,7 @@ public class RenderFactory {
     public static Renderable createRowAttack(RenderShared renderShared, int y) {
         return new Renderable() {
             float stateTime = 0;
-            float topSurface = 720;
+            float topSurface = 727;
             ShapeRenderer shapeRenderer = new ShapeRenderer();
 
             @Override
@@ -24,8 +24,8 @@ public class RenderFactory {
 //                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //                shapeRenderer.rect(0,topSurface - y - y % 32, 1366, 32);
 //                shapeRenderer.end();
-                int yy = y + (int) Constants.GAME_RECT.getY();
-                batch.draw(Assets.textures.runningStringTex, 0,topSurface - yy - yy % 32, 1366, 32);
+                int yy = (y - y % 32) + (int) Constants.GAME_RECT.getY();
+                batch.draw(Assets.textures.runningStringTex, 0, topSurface - yy, 1366, 32);
                 return stateTime < Constants.ATTACK_TIME;
             }
         };
@@ -43,7 +43,7 @@ public class RenderFactory {
 //                shapeRenderer.rect(x - x % 32, 0, 32, 768);
 //                shapeRenderer.end();
 
-                int xx =(x  - x % 32) + (int) Constants.GAME_RECT.getX();
+                int xx = (x - x % 32) + (int) Constants.GAME_RECT.getX();
                 batch.draw(Assets.textures.runningStringTex, xx, 0, 32, 768);
                 stateTime += renderShared.delay;
                 return stateTime < Constants.ATTACK_TIME;
@@ -65,16 +65,18 @@ public class RenderFactory {
 //                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //                shapeRenderer.rect(x - x % 32, 0, 32, 768);
 //                shapeRenderer.end();
-                batch.draw(Assets.textures.fistLeftTex, 0 - (int)(Math.sin(stateTime* 3.14/ATTACK_TIME) * 90), OFFSET_Y - lastMouseY);
+                batch.draw(Assets.textures.fistLeftTex, 0 - (int) (Math.sin(stateTime * 3.14 /
+                    ATTACK_TIME) * 90), OFFSET_Y - lastMouseY);
                 stateTime += renderShared.delay;
-                if(stateTime > ATTACK_TIME){
+                if (stateTime > ATTACK_TIME) {
                     renderShared.rowAttack = createRowAttack(renderShared, y);
-                    return  false;
+                    return false;
                 }
-                return  true;
+                return true;
             }
         };
     }
+
     public static Renderable createDedFistCol(RenderShared renderShared, int x) {
         return new Renderable() {
             float ATTACK_TIME = Constants.ATTACK_TIME;
@@ -89,10 +91,11 @@ public class RenderFactory {
 //                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //                shapeRenderer.rect(x - x % 32, 0, 32, 768);
 //                shapeRenderer.end();
-                batch.draw(Assets.textures.fistTopTex, lastMouseX - OFFSET_X, 600 + (int)(Math.sin(stateTime* 3.14/ATTACK_TIME) * 90));
+                batch.draw(Assets.textures.fistTopTex, lastMouseX - OFFSET_X, 600 + (int) (Math
+                    .sin(stateTime * 3.14 / ATTACK_TIME) * 90));
 
                 stateTime += renderShared.delay;
-                if(stateTime > ATTACK_TIME){
+                if (stateTime > ATTACK_TIME) {
                     renderShared.colAttack = createColAttack(renderShared, x);
                     return false;
                 }

@@ -62,7 +62,7 @@ public class InputSystemDef extends AbstractSystemDef {
                         if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE)) {
                             daddyAttack.write(new DaddyAttack(new Vector2(screenX - Constants
                                 .GAME_RECT.getX(), screenY +
-                                Constants.WND_HEADER_SIZE - Constants.GAME_RECT.getY()),
+                                (2*Constants.WND_HEADER_SIZE + 10) - Constants.GAME_RECT.getY()),
                                 attackDir));
                             defer(() -> {
                                 Assets.audios.hit_tv.play();

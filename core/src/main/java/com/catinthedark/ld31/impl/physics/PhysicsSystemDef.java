@@ -98,36 +98,58 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             }
         }
 
+
         void handleDaddyAttack(DaddyAttack attack) {
             System.out.println("Physics:" + attack);
-            float camPosX = gameShared.cameraPosX.get().x;
-            //normalize
-            camPosX -= Constants.GAME_RECT.getWidth() / 2;
-            if(camPosX < 0)
-                camPosX = 0;
+            if(attack.direction == AttackDirection.BY_COL) {
+                float camPosX = gameShared.cameraPosX.get().x;
+                //normalize
+                camPosX -= Constants.GAME_RECT.getWidth() / 2;
+                if (camPosX < 0)
+                    camPosX = 0;
 
-            float attackX = attack.pos.x;
-            attackX = attackX - attackX % 32;
-            attackX /= 32;
-            System.out.println("cam_x:" + camPosX);
-            System.out.println("attackX:" + attackX);
+                float attackX = attack.pos.x;
+                attackX = attackX - attackX % 32;
+                attackX /= 32;
+                System.out.println("cam_x:" + camPosX);
+                System.out.println("attackX:" + attackX);
 
-            List<Long> forRemove = new ArrayList<>();
-            for(Map.Entry<Long, Body> kv: blocks.entrySet()){
-                //System.out.println("bpos:" + kv.getValue().getPosition());
-                if(Math.abs(camPosX/32 + attackX - kv.getValue().getPosition().x) < 1){
-                    world.destroyBody(kv.getValue());
-                    forRemove.add(kv.getKey());
-                    blockDestroyed.write(kv.getKey());
-                    System.out.println("desttoy block:" + kv.getValue().getPosition());
+                List<Long> forRemove = new ArrayList<>();
+                for (Map.Entry<Long, Body> kv : blocks.entrySet()) {
+                    //System.out.println("bpos:" + kv.getValue().getPosition());
+                    if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
+                        world.destroyBody(kv.getValue());
+                        forRemove.add(kv.getKey());
+                        blockDestroyed.write(kv.getKey());
+                        System.out.println("desttoy block:" + kv.getValue().getPosition());
+                    }
                 }
-            }
 
-            forRemove.forEach((id) -> blocks.remove(id));
+                forRemove.forEach((id) -> blocks.remove(id));
 
 //            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
 //                ().x) % ((int) Constants.GAME_RECT.width);
 //            System.out.print("delta: " + delta);
+            }else{
+                float attackY = Constants.GAME_RECT.height - attack.pos.y;
+                attackY -= 10;
+                attackY = attackY - attackY % 32;
+                attackY /= 32;
+                System.out.println("attackY:" + attackY);
+
+                List<Long> forRemove = new ArrayList<>();
+                for (Map.Entry<Long, Body> kv : blocks.entrySet()) {
+                    //System.out.println("bpos:" + kv.getValue().getPosition());
+                    if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        world.destroyBody(kv.getValue());
+                        forRemove.add(kv.getKey());
+                        blockDestroyed.write(kv.getKey());
+                        System.out.println("desttoy block:" + kv.getValue().getPosition());
+                    }
+                }
+
+                forRemove.forEach((id) -> blocks.remove(id));
+            }
 
         }
 
