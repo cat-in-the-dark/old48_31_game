@@ -60,6 +60,7 @@ public class Assets {
         public Texture coolDownIndicatorRow;
         public TextureRegion gopFrames[][];
         public Texture gopAnimFrame;
+        public Texture bgTex;
 
         @Override
         public void init() {
@@ -85,6 +86,7 @@ public class Assets {
             coolDownIndicatorCol = new Texture(Gdx.files.internal("texture/punch_ready_col.png"));
             coolDownIndicatorRow = new Texture(Gdx.files.internal("texture/punch_ready_row.png"));
             gopFrames = TextureRegion.split(gopAnimFrame, 120, 128);
+            bgTex = new Texture(Gdx.files.internal("texture/bg.png"));
         }
     }
 

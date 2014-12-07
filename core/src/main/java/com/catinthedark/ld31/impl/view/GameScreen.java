@@ -41,12 +41,13 @@ public class GameScreen extends Screen<RenderShared> {
             @Override
             public void render(RenderShared shared) {
                 fbo.begin();
-                Gdx.gl.glClearColor(1.0f, 0, 0, 1.0f);
+                Gdx.gl.glClearColor(0.0f, 0, 0.1f, 1.0f);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 shared.camera.update();
                 batch.setProjectionMatrix(shared.camera.combined);
                 batch.begin();
+                batch.draw(Assets.textures.bgTex, shared.camera.position.x - 755 / 2, 0);
                 shared.levelView.forEach(row -> {
                     for (LevelBlock block : row) {
                         if (block != null && block.status != LevelBlock.STATUS.DESTROYED) {
