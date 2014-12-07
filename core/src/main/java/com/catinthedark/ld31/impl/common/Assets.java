@@ -21,6 +21,7 @@ public class Assets {
     public static class Audios implements Initable {
 
         public Music noise_background;
+        public Music bgm;
         public Sound hit_tv;
         public Sound ouch_enemy;
         public Sound ouch_noise;
@@ -29,6 +30,7 @@ public class Assets {
         @Override
         public void init() {
             noise_background = Gdx.audio.newMusic(Gdx.files.internal("sound/noise_background.mp3"));
+            bgm = Gdx.audio.newMusic(Gdx.files.internal("sound/bgm.mp3"));
             hit_tv = Gdx.audio.newSound(Gdx.files.internal("sound/hit_tv.mp3"));
             ouch_enemy = Gdx.audio.newSound(Gdx.files.internal("sound/ouch_enemy.mp3"));
             ouch_noise = Gdx.audio.newSound(Gdx.files.internal("sound/ouch_noise.mp3"));

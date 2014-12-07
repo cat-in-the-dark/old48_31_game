@@ -111,6 +111,8 @@ public class InputSystemDef extends AbstractSystemDef {
                             break;
                         case MENU:
                             onGameStart.write(Nothing.NONE);
+                            Assets.audios.bgm.setLooping(true);
+                            Assets.audios.bgm.play();
                             sys.state = GameState.IN_GAME;
                             break;
                         case IN_GAME:
