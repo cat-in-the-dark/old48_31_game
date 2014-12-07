@@ -127,11 +127,11 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 state = GameState.GAME_OVER;
             }
 
-            Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
-            cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
-                32, 0);
-            cam.update();
-            dbgRender.render(world, cam.combined);
+//            Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
+//            cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
+//                32, 0);
+//            cam.update();
+//            dbgRender.render(world, cam.combined);
 
         }
 
@@ -315,7 +315,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
                     List<Integer> jumpersForRemove = new ArrayList<>();
                     for (Map.Entry<Integer, Body> kv : jumpers.entrySet()) {
-                        if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        if (Math.abs(attackY - kv.getValue().getPosition().y) < 2) {
                             world.destroyBody(kv.getValue());
                             jumpersForRemove.add(kv.getKey());
                             jumpersDestroyed.write(kv.getKey(), () -> {
@@ -327,7 +327,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
                     List<Integer> walkersForRemove = new ArrayList<>();
                     for (Map.Entry<Integer, Body> kv : walkers.entrySet()) {
-                        if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        if (Math.abs(attackY - kv.getValue().getPosition().y) < 2) {
                             world.destroyBody(kv.getValue());
                             walkersForRemove.add(kv.getKey());
                             walkersDestroyed.write(kv.getKey(), () -> {
@@ -339,7 +339,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
                     List<Integer> shootersForRemove = new ArrayList<>();
                     for (Map.Entry<Integer, Body> kv : shooters.entrySet()) {
-                        if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        if (Math.abs(attackY - kv.getValue().getPosition().y) < 2) {
                             world.destroyBody(kv.getValue());
                             shootersForRemove.add(kv.getKey());
                             shootersDestroyed.write(kv.getKey(), () -> {
