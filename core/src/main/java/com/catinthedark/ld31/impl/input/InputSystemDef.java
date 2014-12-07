@@ -49,8 +49,8 @@ public class InputSystemDef extends AbstractSystemDef {
                 }
                 if (attackDir != null)
                     if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE))
-                        daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY +
-                            Constants.WND_HEADER_SIZE),
+                        daddyAttack.write(new DaddyAttack(new Vector2(screenX - Constants.GAME_RECT.getX(), screenY +
+                            Constants.WND_HEADER_SIZE  - Constants.GAME_RECT.getY()),
                             attackDir));
                 return true;
             }

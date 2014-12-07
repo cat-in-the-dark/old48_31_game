@@ -3,6 +3,7 @@ package com.catinthedark.ld31.impl.view;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.catinthedark.ld31.impl.common.Assets;
+import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.lib.view.Renderable;
 
 import java.util.Map;
@@ -24,7 +25,8 @@ public class RenderFactory {
 //                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //                shapeRenderer.rect(0,topSurface - y - y % 32, 1366, 32);
 //                shapeRenderer.end();
-                batch.draw(Assets.textures.runningStringTex, 0,topSurface - y - y % 32, 1366, 32);
+                int yy = y + (int) Constants.GAME_RECT.getY();
+                batch.draw(Assets.textures.runningStringTex, 0,topSurface - yy - yy % 32, 1366, 32);
                 return stateTime < ATTACK_TIME;
             }
         };
@@ -42,7 +44,9 @@ public class RenderFactory {
 //                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //                shapeRenderer.rect(x - x % 32, 0, 32, 768);
 //                shapeRenderer.end();
-                batch.draw(Assets.textures.runningStringTex, x - x % 32, 0, 32, 768);
+
+                int xx =(x  - x % 32) + (int) Constants.GAME_RECT.getX();
+                batch.draw(Assets.textures.runningStringTex, xx, 0, 32, 768);
                 stateTime += renderShared.delay;
                 return stateTime < ATTACK_TIME;
             }

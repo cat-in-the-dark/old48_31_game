@@ -4,12 +4,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.catinthedark.ld31.impl.common.*;
+import com.catinthedark.ld31.impl.level.LevelBlock;
 import com.catinthedark.ld31.impl.message.BlockCreateReq;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
+import com.catinthedark.ld31.lib.io.Pipe;
 import com.catinthedark.ld31.lib.io.Port;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.catinthedark.ld31.lib.util.SysUtils.conditional;
@@ -19,7 +23,7 @@ import static com.catinthedark.ld31.lib.util.SysUtils.conditional;
  */
 public class PhysicsSystemDef extends AbstractSystemDef {
     public PhysicsSystemDef(GameShared gameShared) {
-        masterDelay = 16;
+        //masterDelay = 16;
         sys = new Sys(gameShared);
         updater(conditional(() -> sys.state == GameState.IN_GAME, sys::update));
         handlePlayerMove = asyncPort(sys::handlePlayerMove);
@@ -35,6 +39,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<BlockCreateReq> onCreateBlock;
     public final Port<Nothing> handlePlayerJump;
     public final Port<Nothing> onGameStart;
+    public final Pipe<Long> blockDestroyed = new Pipe();
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -51,10 +56,9 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         boolean canJump = true;
 
         void update(float delta) {
-            System.out.print("step");
             world.step(delta, 6, 10);
             gameShared.pPos.update((pos) -> pos.set(playerBody.getPosition()));
-            if(playerBody.getLinearVelocity().y == 0 && oldYVelocity == 0) {
+            if (playerBody.getLinearVelocity().y == 0 && oldYVelocity == 0) {
                 canJump = true;
             }
             oldYVelocity = playerBody.getLinearVelocity().y;
@@ -80,7 +84,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         }
 
         void handlePlayerJump(Nothing ignored) {
-            if(canJump) {
+            if (canJump) {
                 playerBody.applyLinearImpulse(Constants.JUMP_IMPULSE, new Vector2(0, 0), true);
                 canJump = false;
             }
@@ -88,6 +92,35 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void handleDaddyAttack(DaddyAttack attack) {
             System.out.println("Physics:" + attack);
+            float camPosX = gameShared.cameraPosX.get().x;
+            //normalize
+            camPosX -= Constants.GAME_RECT.getWidth() / 2;
+            if(camPosX < 0)
+                camPosX = 0;
+
+            float attackX = attack.pos.x;
+            attackX = attackX - attackX % 32;
+            attackX /= 32;
+            System.out.println("cam_x:" + camPosX);
+            System.out.println("attackX:" + attackX);
+
+            List<Long> forRemove = new ArrayList<>();
+            for(Map.Entry<Long, Body> kv: blocks.entrySet()){
+                //System.out.println("bpos:" + kv.getValue().getPosition());
+                if(Math.abs(camPosX/32 + attackX - kv.getValue().getPosition().x) < 1){
+                    world.destroyBody(kv.getValue());
+                    forRemove.add(kv.getKey());
+                    blockDestroyed.write(kv.getKey());
+                    System.out.println("desttoy block:" + kv.getValue().getPosition());
+                }
+            }
+
+            forRemove.forEach((id) -> blocks.remove(id));
+
+//            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
+//                ().x) % ((int) Constants.GAME_RECT.width);
+//            System.out.print("delta: " + delta);
+
         }
 
         void createBlock(BlockCreateReq req) {

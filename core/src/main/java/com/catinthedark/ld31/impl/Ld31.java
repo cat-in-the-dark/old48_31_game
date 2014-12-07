@@ -46,9 +46,9 @@ public class Ld31 extends ApplicationAdapter {
             viewSystem.onGameStart);
 
         Launcher.inThread(inputSystem);
-        Launcher.inThread(physicsSystem);
-        Launcher.inThread(levelSystem);
-        callbackRunner = Launcher.viaCallback(viewSystem);
+        //Launcher.inThread(physicsSystem);
+        //Launcher.inThread(levelSystem);
+        callbackRunner = Launcher.viaCallback(viewSystem, physicsSystem, levelSystem);
 
         new Thread(new Runnable() {
             @Override

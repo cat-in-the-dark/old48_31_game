@@ -73,7 +73,6 @@ public class GameScreen extends Screen<RenderShared> {
                 fbo.end();
                 TextureRegion reg = new TextureRegion(fbo.getColorBufferTexture());
                 reg.flip(false, true);
-                System.out.println("height:" + reg.getRegionHeight());
                 scanlineShader.begin();
                 scanlineShader.setUniformf("resolution", reg.getRegionWidth(), reg.getRegionHeight());
                 scanlineShader.end();
@@ -154,16 +153,13 @@ public class GameScreen extends Screen<RenderShared> {
                 batch.end();
                 batch.begin();
                 if(shared.dedFistAttackCol != null){
-                    System.out.println("here");
                     boolean res = shared.dedFistAttackCol.render(batch);
                     if(!res)
                         shared.dedFistAttackCol = null;
                 }else {
-                    System.out.println("here!");
                     batch.draw(Assets.textures.fistTopTex, shared.lastMouseX - OFFSET_X, 600);
                 }
                 if(shared.dedFistAttackRow != null){
-                    System.out.println("there");
                     boolean res = shared.dedFistAttackRow.render(batch);
                     if(!res)
                         shared.dedFistAttackRow = null;

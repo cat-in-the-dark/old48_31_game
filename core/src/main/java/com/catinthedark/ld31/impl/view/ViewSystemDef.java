@@ -3,7 +3,7 @@ package com.catinthedark.ld31.impl.view;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.catinthedark.ld31.impl.common.*;
-import com.catinthedark.ld31.impl.level.LevelMatrix;
+import com.catinthedark.ld31.impl.level.LevelMatrix2;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Port;
@@ -13,7 +13,7 @@ import com.catinthedark.ld31.lib.view.ScreenManager;
  * Created by over on 06.12.14.
  */
 public class ViewSystemDef extends AbstractSystemDef {
-    public ViewSystemDef(GameShared gameShared, LevelMatrix.View levelView) {
+    public ViewSystemDef(GameShared gameShared, LevelMatrix2.View levelView) {
         sys = new Sys(gameShared, levelView);
         updater(sys::render);
         handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
@@ -33,10 +33,12 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Nothing> onGameStart;
 
     private class Sys {
-        Sys(GameShared gameShared, LevelMatrix.View levelView) {
+        Sys(GameShared gameShared, LevelMatrix2.View levelView) {
             renderShared = new RenderShared();
             renderShared.levelView = levelView;
             renderShared.gameShared = gameShared;
+            gameShared.cameraPosX.update(pos -> pos.set(renderShared.camera.position.x,
+                renderShared.camera.position.y));
         }
 
         GameState state = GameState.INIT;
@@ -61,6 +63,8 @@ public class ViewSystemDef extends AbstractSystemDef {
             if (distance > 128) {
                 renderShared.camera.position.set(camPos.x + 5, camPos.y, camPos.z);
                 renderShared.camera.update();
+                renderShared.gameShared.cameraPosX.update(vec -> vec.x = renderShared.camera
+                    .position.x);
             }
         }
 
@@ -100,14 +104,17 @@ public class ViewSystemDef extends AbstractSystemDef {
             state = GameState.TUTORIAL1;
             screenManager.goTo(4);
         }
+
         void onGameStart(Nothing none) {
             state = GameState.IN_GAME;
             screenManager.goTo(5);
         }
+
         void gotoGameOver(Nothing none) {
             state = GameState.GAME_OVER;
             screenManager.goTo(6);
         }
+
         void gotoGameWin(Nothing none) {
             state = GameState.GAME_WIN;
             screenManager.goTo(7);
