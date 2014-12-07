@@ -50,4 +50,8 @@ public class LevelMatrix2 {
         }
     }
 
+    public void reset(){
+        matrix.clear();
+    }
+
 }

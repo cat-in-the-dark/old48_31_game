@@ -16,9 +16,17 @@ public class GameShared {
     public SharedVal<Vector2> cameraPosX = new SharedVal<>(new Vector2());
     public int gameScore = 0;
     public int moralityLevel = Constants.MAX_MORALITY_LEVEL;
-    public SharedPool<Walker> walkers = new SharedPool<>(Walker.class, 20);
-    public SharedPool<Shooter> shooters = new SharedPool<>(Shooter.class, 20);
-    public SharedPool<Jumper> jumpers = new SharedPool<>(Jumper.class, 20);
-    public SharedPool<Bottle> bottles = new SharedPool<>(Bottle.class, 20);
+    public SharedPool<Walker> walkers = new SharedPool<>(Walker.class, 100);
+    public SharedPool<Shooter> shooters = new SharedPool<>(Shooter.class, 100);
+    public SharedPool<Jumper> jumpers = new SharedPool<>(Jumper.class, 100);
+    public SharedPool<Bottle> bottles = new SharedPool<>(Bottle.class, 100);
+
+    public void reset(){
+        walkers =  new SharedPool<>(Walker.class, 100);
+        shooters = new SharedPool<>(Shooter.class, 100);
+        jumpers = new SharedPool<>(Jumper.class, 100);
+        bottles = new SharedPool<>(Bottle.class, 100);
+    }
+
 
 }

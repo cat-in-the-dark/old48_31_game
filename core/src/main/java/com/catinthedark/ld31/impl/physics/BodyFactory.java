@@ -102,7 +102,7 @@ public class BodyFactory {
         bodyDef.position.set(jumper.pos.x, jumper.pos.y);
         Body jumperBody = world.createBody(bodyDef);
 
-        PLayerUserData playerUserData = new PLayerUserData();
+        BotUserData playerUserData = new BotUserData();
 
         Fixture pFixLow = jumperBody.createFixture(playerShapeLow, 0.05f);
         pFixLow.setUserData(playerUserData);
@@ -135,7 +135,7 @@ public class BodyFactory {
         bodyDef.position.set(shooter.pos.x, shooter.pos.y);
         Body shooterBody = world.createBody(bodyDef);
 
-        PLayerUserData playerUserData = new PLayerUserData();
+        BotUserData playerUserData = new BotUserData();
 
         Fixture pFixLow = shooterBody.createFixture(playerShapeLow, 0.05f);
         pFixLow.setUserData(playerUserData);
@@ -168,7 +168,7 @@ public class BodyFactory {
         bodyDef.position.set(walker.pos.x, walker.pos.y);
         Body walkerBody = world.createBody(bodyDef);
 
-        PLayerUserData playerUserData = new PLayerUserData();
+        BotUserData playerUserData = new BotUserData();
 
         Fixture pFixLow = walkerBody.createFixture(playerShapeLow, 0.05f);
         pFixLow.setUserData(playerUserData);

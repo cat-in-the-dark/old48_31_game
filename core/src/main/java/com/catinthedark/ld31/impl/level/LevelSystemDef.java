@@ -68,6 +68,9 @@ public class LevelSystemDef extends AbstractSystemDef {
 
         void onGameStart(Nothing nothing) {
             state = GameState.IN_GAME;
+            matrix.reset();
+            currentX = 0;
+            gameShared.reset();
             Assets.audios.noise_background.setVolume(0.5f);
             Assets.audios.noise_background.setLooping(true);
             Assets.audios.noise_background.play();

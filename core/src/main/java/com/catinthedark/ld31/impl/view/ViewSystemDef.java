@@ -22,6 +22,7 @@ public class ViewSystemDef extends AbstractSystemDef {
         gotoTutorial2 = serialPort(sys::gotoTutorial2);
         gotoTutorial3 = serialPort(sys::gotoTutorial3);
         gotoMenu = serialPort(sys::gotoMenu);
+        gotoGameOver = serialPort(sys::gotoGameOver);
         onGameStart = serialPort(sys::onGameStart);
         createJumper = serialPort(sys::createJumper);
         createShooter = serialPort(sys::createShooter);
@@ -39,6 +40,7 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Nothing> gotoTutorial2;
     public final Port<Nothing> gotoTutorial3;
     public final Port<Nothing> gotoMenu;
+    public final Port<Nothing> gotoGameOver;
     public final Port<Nothing> onGameStart;
     public final Port<Integer> createJumper;
     public final Port<Integer> createShooter;
@@ -70,6 +72,7 @@ public class ViewSystemDef extends AbstractSystemDef {
             renderShared.delay = delay;
             screenManager.render(renderShared);
             _cameraMove();
+            renderShared.gameShared.gameScore = (int) renderShared.gameShared.pPos.get().x;
         }
 
         void _cameraMove() {
@@ -141,21 +144,29 @@ public class ViewSystemDef extends AbstractSystemDef {
         }
 
         void gotoTutorial2(Nothing none) {
-            state = GameState.TUTORIAL1;
+            state = GameState.TUTORIAL2;
             screenManager.goTo(2);
         }
 
         void gotoTutorial3(Nothing none) {
-            state = GameState.TUTORIAL1;
+            state = GameState.TUTORIAL3;
             screenManager.goTo(3);
         }
 
         void gotoMenu(Nothing none) {
-            state = GameState.TUTORIAL1;
+            state = GameState.MENU;
             screenManager.goTo(4);
         }
 
         void onGameStart(Nothing none) {
+            System.out.println("view: gameStart");
+            renderShared.bottlesIds.clear();
+            renderShared.jumpersIds.clear();
+            renderShared.walkerids.clear();
+            renderShared.shootersIds.clear();
+            renderShared.camera.position.x = 755/2;
+            renderShared.camera.position.y = 520/2;
+            renderShared.camera.update();
             state = GameState.IN_GAME;
             screenManager.goTo(5);
         }

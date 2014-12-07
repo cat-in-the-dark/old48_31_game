@@ -12,7 +12,7 @@ public class Constants {
     public static final int COOLDOWN_COL_TIME = 1500; // ms
     public static final int HUD_TOP = 10;
     public static final int HUD_LEFT = 20;
-    public static final int MAX_MORALITY_LEVEL = 10;
+    public static final int MAX_MORALITY_LEVEL = 100;
     public static final float ATTACK_TIME = 0.3f;
     public static final Rectangle GAME_RECT = new Rectangle(340, 180, 755, 520);
 	public static final int WND_HEADER_SIZE = 10;

@@ -57,6 +57,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Pipe<Integer> bottleDestroyed = new Pipe<>(this);
     public final Pipe<Integer> walkersDestroyed = new Pipe<>(this);
     public final Pipe<Integer> shootersDestroyed = new Pipe<>(this);
+    public final Pipe<Nothing> gameOver = new Pipe<>();
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -115,6 +116,11 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 playerBody.getPosition().set((camPosX - Constants.GAME_RECT.x) / 32 + 1,
                     playerBody.getPosition().y);
             }
+            if(gameShared.moralityLevel == 0) {
+                gameOver.write(Nothing.NONE);
+                state = GameState.GAME_OVER;
+            }
+
 
             Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
             cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
@@ -125,6 +131,13 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         }
 
         void onGameStart(Nothing ignored) throws InterruptedException {
+            jumpers.clear();
+            walkers.clear();
+            shooters.clear();
+            bottles.clear();
+
+            gameShared.moralityLevel = 100;
+            gameShared.gameScore = 0;
             System.out.println("Physics: on game start");
             if (world != null)
                 world.dispose();
@@ -152,6 +165,17 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 //                            });
 //                        }
 //                    }
+                    if(query(PLayerUserData.class, BotUserData.class, contact) != null){
+                        gameShared.moralityLevel--;
+                        System.out.println("playerHit");
+                        System.out.println("moral: " + gameShared.moralityLevel);
+                    }
+                    if(query(PLayerUserData.class, BottleUserData.class, contact) != null){
+                        gameShared.moralityLevel-= 10;
+                        System.out.println("playerHit bottle");
+                    }
+                    if(gameShared.moralityLevel < 0)
+                        gameShared.moralityLevel = 0;
                 }
 
                 @Override

@@ -44,7 +44,7 @@ public class Ld31 extends ApplicationAdapter {
         inputSystem.gotoTutorial3.connect(viewSystem.gotoTutorial3);
         inputSystem.gotoMenu.connect(viewSystem.gotoMenu);
         inputSystem.onGameStart.connect(physicsSystem.onGameStart, levelSystem.onGameStart,
-            viewSystem.onGameStart);
+            viewSystem.onGameStart, aiSystem.gameStart);
 
         physicsSystem.blockDestroyed.connect(levelSystem.blockDestroyed);
 
@@ -63,6 +63,8 @@ public class Ld31 extends ApplicationAdapter {
         physicsSystem.jumpersDestroyed.connect(viewSystem.jumperDestroyed, aiSystem.destroyJumper);
         physicsSystem.walkersDestroyed.connect(viewSystem.walkerDestroyed, aiSystem.destroyWalker);
         physicsSystem.shootersDestroyed.connect(viewSystem.shooterDestroyed, aiSystem.destroyShooter);
+
+        physicsSystem.gameOver.connect(viewSystem.gotoGameOver, aiSystem.gameOver, inputSystem.onGameOver);
 
         Launcher.inThread(inputSystem);
         Launcher.inThread(aiSystem);

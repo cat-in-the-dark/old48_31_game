@@ -16,6 +16,7 @@ import com.catinthedark.ld31.lib.io.Port;
 public class InputSystemDef extends AbstractSystemDef {
     final Sys sys;
     public final Pipe<Nothing> onGameStart = new Pipe<>();
+    public final Port<Nothing> onGameOver;
     public final Pipe<DirectionX> playerMove = new Pipe<>();
     public final Pipe<Nothing> playerJump = new Pipe<>();
     public final Pipe<DaddyAttack> daddyAttack = new Pipe<>();
@@ -30,6 +31,7 @@ public class InputSystemDef extends AbstractSystemDef {
         masterDelay = 50;
         updater(sys::pollMove);
         gotoTutorial = serialPort(sys::gotoTutorial);
+        onGameOver = serialPort(sys::gotoGameOver);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             boolean canColAttack = true;
@@ -119,6 +121,13 @@ public class InputSystemDef extends AbstractSystemDef {
                             break;
                     }
                 }
+
+                if (keycode == Input.Keys.ESCAPE) {
+                    if(sys.state == GameState.GAME_OVER) {
+                        sys.state = GameState.IN_GAME;
+                        onGameStart.write(Nothing.NONE);
+                    }
+                }
                 return true;
             }
         });
@@ -140,6 +149,10 @@ public class InputSystemDef extends AbstractSystemDef {
 
         void gotoTutorial(Nothing none) {
             state = GameState.TUTORIAL1;
+        }
+
+        void gotoGameOver(Nothing note){
+            state = GameState.GAME_OVER;
         }
 
 
