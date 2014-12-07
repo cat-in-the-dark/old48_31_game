@@ -5,9 +5,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Assets {
     private interface Initable {
@@ -53,6 +57,8 @@ public class Assets {
         public Texture gameWin;
         public Texture gameOver;
         public Texture coolDownIndicator;
+        public TextureRegion gopFrames[][];
+        public Texture gopAnimFrame;
 
         @Override
         public void init() {
@@ -62,6 +68,7 @@ public class Assets {
             pedofil = new Texture(Gdx.files.internal("texture/pedofil.png"));
             lady = new Texture(Gdx.files.internal("texture/lady.png"));
             gop = new Texture(Gdx.files.internal("texture/gopstop.png"));
+            gopAnimFrame = new Texture(Gdx.files.internal("texture/gopstop_animation.png"));
             bottle = new Texture(Gdx.files.internal("texture/bottle.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
             Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
@@ -75,6 +82,7 @@ public class Assets {
             gameOver = new Texture(Gdx.files.internal("texture/gameover.png"));
             gameWin = new Texture(Gdx.files.internal("texture/gamewin.png"));
             coolDownIndicator = new Texture(Gdx.files.internal("texture/punch_ready.png"));
+            gopFrames = TextureRegion.split(gopAnimFrame, 120, 128);
         }
     }
 
@@ -100,13 +108,23 @@ public class Assets {
 
     public static class Animations implements Initable {
 
+        private TextureRegion[] selectRegions(TextureRegion[][] frames,
+                                              int[] framesNumbers) {
+            List<TextureRegion> regions = new ArrayList<TextureRegion>(
+                    framesNumbers.length);
+            for (int index : framesNumbers) {
+                regions.add(frames[0][index]);
+            }
 
+            return regions.toArray(new TextureRegion[regions.size()]);
+        }
 
+        public Animation gop_anim;
 
         @Override
         public void init() {
-
-
+            gop_anim = new Animation(0.05f, selectRegions(textures.gopFrames, new int[] { 0, 1, 2,
+                    3, 4, 5, 6, 7, 8, 9 }));
         }
 
     }
