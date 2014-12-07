@@ -1,5 +1,6 @@
 package com.catinthedark.ld31.impl.level;
 
+import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.DirectionX;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.common.GameState;
@@ -46,6 +47,10 @@ public class LevelSystemDef extends AbstractSystemDef{
             matrix = new LevelMatrix(10, 70, block -> {
 
             });
+
+            Assets.audios.noise_background.setVolume(0.5f);
+                    Assets.audios.noise_background.setLooping(true);
+            Assets.audios.noise_background.play();
         }
 
         void update(float delay){

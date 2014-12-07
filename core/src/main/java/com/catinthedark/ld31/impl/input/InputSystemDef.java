@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
+import com.catinthedark.ld31.lib.common.RunnableEx;
 import com.catinthedark.ld31.lib.io.Pipe;
 import com.catinthedark.ld31.lib.io.Port;
 
@@ -48,10 +49,15 @@ public class InputSystemDef extends AbstractSystemDef {
                         break;
                 }
                 if (attackDir != null)
-                    if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE))
+                    if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE)) {
                         daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY +
                             Constants.WND_HEADER_SIZE),
                             attackDir));
+                        defer(() -> {
+                            Assets.audios.hit_tv.play();
+                            Assets.audios.noise_sfx.play();
+                        }, (int) (Constants.ATTACK_TIME * 1000));
+                    }
                 return true;
             }
 
