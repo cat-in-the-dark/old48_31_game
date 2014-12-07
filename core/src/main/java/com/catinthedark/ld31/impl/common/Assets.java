@@ -3,9 +3,11 @@ package com.catinthedark.ld31.impl.common;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class Assets {
     private interface Initable {
@@ -72,7 +74,15 @@ public class Assets {
 
         @Override
         public void init() {
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
+                    Gdx.files.internal("font/impact.ttf"));
+            FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            params.size = 20;
 
+            hudFont = generator.generateFont(params);
+            hudFont.setColor(Color.WHITE);
+            generator.dispose(); // don't forget to dispose to avoid memory
+            // leaks!
 
         }
 
