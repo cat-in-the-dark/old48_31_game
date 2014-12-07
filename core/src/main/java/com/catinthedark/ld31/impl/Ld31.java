@@ -65,6 +65,7 @@ public class Ld31 extends ApplicationAdapter {
         physicsSystem.shootersDestroyed.connect(viewSystem.shooterDestroyed, aiSystem.destroyShooter);
 
         physicsSystem.gameOver.connect(viewSystem.gotoGameOver, aiSystem.gameOver, inputSystem.onGameOver);
+        physicsSystem.gameWin.connect(viewSystem.gotoGameWin);
 
         Launcher.inThread(inputSystem);
         Launcher.inThread(aiSystem);

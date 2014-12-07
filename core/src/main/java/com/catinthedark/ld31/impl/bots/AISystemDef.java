@@ -59,7 +59,7 @@ public class AISystemDef extends AbstractSystemDef {
         void update(float delta) {
             jumpersIds.forEach(jid -> {
                 Jumper jumper = shared.jumpers.map(jid);
-                if (Math.abs(jumper.pos.x - shared.pPos.get().x) < 10 && jumper.state == Jumper
+                if (Math.abs(jumper.pos.x - shared.pPos.get().x) < 15 && jumper.state == Jumper
                     .State.QUIET) {
                     System.out.println("jumper(" + jid + ") active");
                     jumper.state = Jumper.State.IN_JUMP;
@@ -73,7 +73,7 @@ public class AISystemDef extends AbstractSystemDef {
 
             walkersIds.forEach(jid -> {
                 Walker walker = shared.walkers.map(jid);
-                if (Math.abs(walker.pos.x - shared.pPos.get().x) < 10) {
+                if (Math.abs(walker.pos.x - shared.pPos.get().x) < 15) {
                     System.out.println("walker(" + jid + ") active");
                     walkerGo.write(jid);
                 }
@@ -81,7 +81,7 @@ public class AISystemDef extends AbstractSystemDef {
 
             shootersIds.forEach(jid -> {
                 Shooter shooter = shared.shooters.map(jid);
-                if (Math.abs(shooter.pos.x - shared.pPos.get().x) < 10 && shooter.state ==
+                if (Math.abs(shooter.pos.x - shared.pPos.get().x) < 15 && shooter.state ==
                     Shooter.State.QUIET) {
                     System.out.println("shooter(" + jid + ") active");
                     shooter.state = Shooter.State.SHOOT;

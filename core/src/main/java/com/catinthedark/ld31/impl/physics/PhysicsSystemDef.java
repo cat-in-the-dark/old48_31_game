@@ -58,6 +58,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Pipe<Integer> walkersDestroyed = new Pipe<>(this);
     public final Pipe<Integer> shootersDestroyed = new Pipe<>(this);
     public final Pipe<Nothing> gameOver = new Pipe<>();
+    public final Pipe<Nothing> gameWin = new Pipe<>();
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -123,6 +124,10 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             if (playerBody.getPosition().y < -10) {
                 gameOver.write(Nothing.NONE);
                 state = GameState.GAME_OVER;
+            }
+
+            if(playerBody.getPosition().x > 1000){
+                gameWin.write(Nothing.NONE);
             }
 
 //            Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
