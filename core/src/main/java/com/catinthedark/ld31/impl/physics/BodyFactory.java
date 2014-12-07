@@ -39,66 +39,148 @@ public class BodyFactory {
     }
 
     public static Body createPlayer(World world){
-        // TODO: add 2 more shapes on the left and right sides of player with friction = 0 to make player slide across walls sides
-        CircleShape playerShape = new CircleShape();
-        playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
+        CircleShape playerShapeLow = new CircleShape();
+        playerShapeLow.setRadius(Constants.PLAYER_WIDTH / 2);
+
+        CircleShape playerShapeMid = new CircleShape();
+        playerShapeMid.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeMid.setPosition(new Vector2(0, Constants.PLAYER_WIDTH));
+
+        CircleShape playerShapeHigh = new CircleShape();
+        playerShapeHigh.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeHigh.setPosition(new Vector2(0, Constants.PLAYER_WIDTH * 2));
+
+        PolygonShape playerShapeLeft = new PolygonShape();
+        playerShapeLeft.setAsBox(0.01f, Constants.PLAYER_WIDTH, new Vector2(Constants.PLAYER_WIDTH / 2, Constants.PLAYER_WIDTH), 0);
+
+        PolygonShape playerShapeRight = new PolygonShape();
+        playerShapeRight.setAsBox(0.01f, Constants.PLAYER_WIDTH, new Vector2(-Constants.PLAYER_WIDTH / 2, Constants.PLAYER_WIDTH), 0);
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = true;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(5, 10);
         Body playerBody = world.createBody(bodyDef);
-        Fixture pFix = playerBody.createFixture(playerShape, 0.1f);
-        pFix.setUserData(new PLayerUserData());
-        pFix.setFriction(Constants.FRICTION);
+
+        PLayerUserData playerUserData = new PLayerUserData();
+
+        Fixture pFixLow = playerBody.createFixture(playerShapeLow, 0.1f);
+        pFixLow.setUserData(playerUserData);
+        pFixLow.setFriction(Constants.FRICTION);
+
+        Fixture pFixMid = playerBody.createFixture(playerShapeMid, 0.1f);
+        pFixMid.setUserData(playerUserData);
+
+        Fixture pFixHigh = playerBody.createFixture(playerShapeHigh, 0.1f);
+        pFixHigh.setUserData(playerUserData);
+
+        Fixture pFixLeft = playerBody.createFixture(playerShapeLeft, 0.1f);
+        pFixLeft.setFriction(0);
+        pFixLeft.setUserData(playerUserData);
+
+        Fixture pFixRight = playerBody.createFixture(playerShapeRight, 0.1f);
+        pFixRight.setFriction(0);
+        pFixRight.setUserData(playerUserData);
 
         return  playerBody;
     }
     public static Body createJumper(World world, Jumper jumper){
-        // TODO: add 2 more shapes on the left and right sides of player with friction = 0 to make player slide across walls sides
-        CircleShape playerShape = new CircleShape();
-        playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
+        CircleShape playerShapeLow = new CircleShape();
+        playerShapeLow.setRadius(Constants.PLAYER_WIDTH / 2);
+
+        CircleShape playerShapeMid = new CircleShape();
+        playerShapeMid.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeMid.setPosition(new Vector2(0, Constants.PLAYER_WIDTH));
+
+        CircleShape playerShapeHigh = new CircleShape();
+        playerShapeHigh.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeHigh.setPosition(new Vector2(0, Constants.PLAYER_WIDTH * 2));
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = true;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(jumper.pos.x, jumper.pos.y);
         Body jumperBody = world.createBody(bodyDef);
-        Fixture pFix = jumperBody.createFixture(playerShape, 0.1f);
-        pFix.setUserData(new PLayerUserData());
-        pFix.setFriction(Constants.FRICTION);
+
+        PLayerUserData playerUserData = new PLayerUserData();
+
+        Fixture pFixLow = jumperBody.createFixture(playerShapeLow, 0.05f);
+        pFixLow.setUserData(playerUserData);
+        pFixLow.setFriction(Constants.FRICTION);
+
+        Fixture pFixMid = jumperBody.createFixture(playerShapeMid, 0.1f);
+        pFixMid.setUserData(playerUserData);
+
+        Fixture pFixHigh = jumperBody.createFixture(playerShapeHigh, 0.05f);
+        pFixHigh.setUserData(playerUserData);
 
         return  jumperBody;
     }
 
     public static Body createShooter(World world, Shooter shooter){
-        // TODO: add 2 more shapes on the left and right sides of player with friction = 0 to make player slide across walls sides
-        CircleShape playerShape = new CircleShape();
-        playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
+        CircleShape playerShapeLow = new CircleShape();
+        playerShapeLow.setRadius(Constants.PLAYER_WIDTH / 2);
+
+        CircleShape playerShapeMid = new CircleShape();
+        playerShapeMid.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeMid.setPosition(new Vector2(0, Constants.PLAYER_WIDTH));
+
+        CircleShape playerShapeHigh = new CircleShape();
+        playerShapeHigh.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeHigh.setPosition(new Vector2(0, Constants.PLAYER_WIDTH * 2));
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = true;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(shooter.pos.x, shooter.pos.y);
-        Body jumperBody = world.createBody(bodyDef);
-        Fixture pFix = jumperBody.createFixture(playerShape, 0.1f);
-        pFix.setUserData(new PLayerUserData());
-        pFix.setFriction(Constants.FRICTION);
+        Body shooterBody = world.createBody(bodyDef);
 
-        return  jumperBody;
+        PLayerUserData playerUserData = new PLayerUserData();
+
+        Fixture pFixLow = shooterBody.createFixture(playerShapeLow, 0.05f);
+        pFixLow.setUserData(playerUserData);
+        pFixLow.setFriction(Constants.FRICTION);
+
+        Fixture pFixMid = shooterBody.createFixture(playerShapeMid, 0.1f);
+        pFixMid.setUserData(playerUserData);
+
+        Fixture pFixHigh = shooterBody.createFixture(playerShapeHigh, 0.05f);
+        pFixHigh.setUserData(playerUserData);
+
+        return  shooterBody;
     }
 
     public static Body createWalker(World world, Walker walker){
-        // TODO: add 2 more shapes on the left and right sides of player with friction = 0 to make player slide across walls sides
-        CircleShape playerShape = new CircleShape();
-        playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
+        CircleShape playerShapeLow = new CircleShape();
+        playerShapeLow.setRadius(Constants.PLAYER_WIDTH / 2);
+
+        CircleShape playerShapeMid = new CircleShape();
+        playerShapeMid.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeMid.setPosition(new Vector2(0, Constants.PLAYER_WIDTH));
+
+        CircleShape playerShapeHigh = new CircleShape();
+        playerShapeHigh.setRadius(Constants.PLAYER_WIDTH / 2);
+        playerShapeHigh.setPosition(new Vector2(0, Constants.PLAYER_WIDTH * 2));
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = true;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(walker.pos.x, walker.pos.y);
-        Body jumperBody = world.createBody(bodyDef);
-        Fixture pFix = jumperBody.createFixture(playerShape, 0.1f);
-        pFix.setUserData(new PLayerUserData());
-        pFix.setFriction(Constants.FRICTION);
+        Body walkerBody = world.createBody(bodyDef);
 
-        return  jumperBody;
+        PLayerUserData playerUserData = new PLayerUserData();
+
+        Fixture pFixLow = walkerBody.createFixture(playerShapeLow, 0.05f);
+        pFixLow.setUserData(playerUserData);
+        pFixLow.setFriction(Constants.FRICTION);
+
+        Fixture pFixMid = walkerBody.createFixture(playerShapeMid, 0.1f);
+        pFixMid.setUserData(playerUserData);
+
+        Fixture pFixHigh = walkerBody.createFixture(playerShapeHigh, 0.05f);
+        pFixHigh.setUserData(playerUserData);
+
+        return  walkerBody;
     }
 
     public static Body createBottle(World world, Vector2 pos, int id){

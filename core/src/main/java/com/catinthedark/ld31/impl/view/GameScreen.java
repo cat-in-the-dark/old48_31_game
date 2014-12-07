@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.catinthedark.ld31.impl.bots.Bottle;
 import com.catinthedark.ld31.impl.bots.Jumper;
 import com.catinthedark.ld31.impl.bots.Shooter;
@@ -74,7 +72,7 @@ public class GameScreen extends Screen<RenderShared> {
                     batch.draw(Assets.textures.pedofil, jumper.pos.x * 32 - 28, jumper.pos.y * 32);
                 });
 
-                shared.wolkersIds.forEach(jid -> {
+                shared.walkerids.forEach(jid -> {
                     Walker walker = shared.gameShared.walkers.map(jid);
                     batch.draw(Assets.textures.lady, walker.pos.x * 32 - 28, walker.pos.y * 32);
                 });

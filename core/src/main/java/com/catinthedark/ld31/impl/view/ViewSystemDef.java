@@ -9,12 +9,11 @@ import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Port;
 import com.catinthedark.ld31.lib.view.ScreenManager;
 
-import java.util.Objects;
-
 /**
  * Created by over on 06.12.14.
  */
 public class ViewSystemDef extends AbstractSystemDef {
+
     public ViewSystemDef(GameShared gameShared, LevelMatrix2.View levelView) {
         sys = new Sys(gameShared, levelView);
         updater(sys::render);
@@ -30,6 +29,8 @@ public class ViewSystemDef extends AbstractSystemDef {
         createBottle = serialPort(sys::createBottle);
         bottleDestroyed = serialPort(sys::bottleDestroyed);
         jumperDestroyed = serialPort(sys::jumperDestroyed);
+        walkerDestroyed = serialPort(sys::walkerDestroyed);
+        shooterDestroyed = serialPort(sys::shooterDestroyed);
     }
 
     final Sys sys;
@@ -45,6 +46,8 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Integer> createBottle;
     public final Port<Integer> bottleDestroyed;
     public final Port<Integer> jumperDestroyed;
+    public final Port<Integer> walkerDestroyed;
+    public final Port<Integer> shooterDestroyed;
 
     private class Sys {
         Sys(GameShared gameShared, LevelMatrix2.View levelView) {
@@ -105,7 +108,7 @@ public class ViewSystemDef extends AbstractSystemDef {
             renderShared.jumpersIds.add(id);
         }
         void createWalker(Integer id) {
-            renderShared.wolkersIds.add(id);
+            renderShared.walkerids.add(id);
         }
         void createShooter(Integer id) {
             renderShared.shootersIds.add(id);
@@ -123,6 +126,13 @@ public class ViewSystemDef extends AbstractSystemDef {
 
         void bottleDestroyed(Integer id) {
             renderShared.bottlesIds.remove((Object) id);
+        }
+        void walkerDestroyed(Integer id) {
+            renderShared.walkerids.remove((Object) id);
+        }
+
+        void shooterDestroyed(Integer id) {
+            renderShared.shootersIds.remove((Object) id);
         }
 
         void gotoTutorial(Nothing none) {

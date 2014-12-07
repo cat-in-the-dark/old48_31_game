@@ -32,7 +32,7 @@ public class RenderShared {
     int lastMouseY = 0;
 
     public List<Integer> shootersIds = new ArrayList<>();
-    public List<Integer> wolkersIds = new ArrayList<>();
+    public List<Integer> walkerids = new ArrayList<>();
     public List<Integer> jumpersIds = new ArrayList<>();
     public List<Integer> bottlesIds = new ArrayList<>();
 }

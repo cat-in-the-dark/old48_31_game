@@ -32,9 +32,9 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         onCreateBlock = asyncPort(sys::createBlock);
         createJumper = serialPort(sys::createJumper);
         jumperJump = asyncPort(sys::jumperJump);
-        createWalker = serialPort(sys::createShooter);
+        createWalker = serialPort(sys::createWalker);
         walkerWalk = asyncPort(sys::walkerGo);
-        createShooter = serialPort(sys::createWalker);
+        createShooter = serialPort(sys::createShooter);
         shooterShoot = serialPort(sys::shooterShoot);
         onGameStart = serialPort(sys::onGameStart);
     }
@@ -55,6 +55,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Pipe<Integer> jumpersDestroyed = new Pipe<>(this);
     public final Pipe<Integer> bottleCreated = new Pipe<>();
     public final Pipe<Integer> bottleDestroyed = new Pipe<>(this);
+    public final Pipe<Integer> walkersDestroyed = new Pipe<>(this);
+    public final Pipe<Integer> shootersDestroyed = new Pipe<>(this);
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -233,6 +235,29 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 }
                 jumpersForRemove.forEach((id) -> jumpers.remove((Object) id));
 
+                List<Integer> walkersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : walkers.entrySet()) {
+                    if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
+                        world.destroyBody(kv.getValue());
+                        walkersForRemove.add(kv.getKey());
+                        walkersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.walkers.free(kv.getKey());
+                        });
+                    }
+                }
+                walkersForRemove.forEach((id) -> walkers.remove((Object) id));
+
+                List<Integer> shootersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : shooters.entrySet()) {
+                    if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
+                        world.destroyBody(kv.getValue());
+                        shootersForRemove.add(kv.getKey());
+                        shootersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.shooters.free(kv.getKey());
+                        });
+                    }
+                }
+                shootersForRemove.forEach((id) -> shooters.remove((Object) id));
 
 //            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
 //                ().x) % ((int) Constants.GAME_RECT.width);
@@ -268,6 +293,30 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                     }
                 }
                 jumpersForRemove.forEach((id) -> jumpers.remove((Object) id));
+
+                List<Integer> walkersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : walkers.entrySet()) {
+                    if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        world.destroyBody(kv.getValue());
+                        walkersForRemove.add(kv.getKey());
+                        walkersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.walkers.free(kv.getKey());
+                        });
+                    }
+                }
+                walkersForRemove.forEach((id) -> walkers.remove((Object) id));
+
+                List<Integer> shootersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : shooters.entrySet()) {
+                    if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        world.destroyBody(kv.getValue());
+                        shootersForRemove.add(kv.getKey());
+                        shootersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.shooters.free(kv.getKey());
+                        });
+                    }
+                }
+                shootersForRemove.forEach((id) -> shooters.remove((Object) id));
             }
 
         }
@@ -301,8 +350,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 jVec = Constants.JUMP_IMPULSE_PEDO_RIGHT;
             else
                 jVec = Constants.JUMP_IMPULSE_PEDO_LEFT;
-            jBody.applyLinearImpulse(jVec.cpy().scl(0.5f), new
-                Vector2(0, 0), true);
+            jBody.applyLinearImpulse(jVec, new Vector2(0, 0), true);
         }
 
 

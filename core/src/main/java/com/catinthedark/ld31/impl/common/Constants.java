@@ -35,7 +35,7 @@ public class Constants {
 
 	public static final int WORLD_GRAVITY = -30;
 
-	public static final Vector2 JUMP_IMPULSE = new Vector2(0f, 3.0f);
+	public static final Vector2 JUMP_IMPULSE = new Vector2(0f, 4.0f);
 	public static final Vector2 JUMP_IMPULSE_PEDO_LEFT = new Vector2(-1f, 3.0f);
 	public static final Vector2 JUMP_IMPULSE_PEDO_RIGHT = new Vector2(1f, 3.0f);
 
