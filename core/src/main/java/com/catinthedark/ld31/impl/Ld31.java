@@ -45,6 +45,7 @@ public class Ld31 extends ApplicationAdapter {
             viewSystem.onGameStart);
 
         physicsSystem.blockDestroyed.connect(levelSystem.blockDestroyed);
+        levelSystem.createJumper.connect(physicsSystem.createJumper, viewSystem.createJumper);
 
         Launcher.inThread(inputSystem);
         //Launcher.inThread(physicsSystem);

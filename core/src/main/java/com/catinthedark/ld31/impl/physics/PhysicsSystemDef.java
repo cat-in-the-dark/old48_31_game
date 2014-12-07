@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.catinthedark.ld31.impl.common.*;
-import com.catinthedark.ld31.impl.level.LevelBlock;
 import com.catinthedark.ld31.impl.message.BlockCreateReq;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
@@ -33,6 +32,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         handlePlayerJump = asyncPort(sys::handlePlayerJump);
         handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
         onCreateBlock = asyncPort(sys::createBlock);
+        createJumper = serialPort(sys::createJumper);
         onGameStart = serialPort(sys::onGameStart);
     }
 
@@ -40,6 +40,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<DirectionX> handlePlayerMove;
     public final Port<DaddyAttack> handleDaddyAttack;
     public final Port<BlockCreateReq> onCreateBlock;
+    public final Port<Integer> createJumper;
     public final Port<Nothing> handlePlayerJump;
     public final Port<Nothing> onGameStart;
     public final Pipe<Long> blockDestroyed = new Pipe();
@@ -58,6 +59,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         float oldYVelocity = 0;
         boolean canJump = true;
         Box2DDebugRenderer dbgRender = new Box2DDebugRenderer();
+        public Map<Integer, Body> jumpers = new HashMap<>();
 
         void update(float delta) {
             world.step(delta, 6, 10);
@@ -66,8 +68,17 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 canJump = true;
             }
             oldYVelocity = playerBody.getLinearVelocity().y;
-            Camera cam = new OrthographicCamera(755/32,520/32);
-            cam.position.set(gameShared.cameraPosX.get().x / 32,gameShared.cameraPosX.get().y /32, 0);
+
+            jumpers.entrySet().forEach((kv) -> {
+                gameShared.jumpers.update(kv.getKey(), (j) -> {
+                    j.pos.set(kv.getValue().getPosition());
+                });
+            });
+
+
+            Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
+            cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
+                32, 0);
             cam.update();
             dbgRender.render(world, cam.combined);
 
@@ -101,7 +112,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void handleDaddyAttack(DaddyAttack attack) {
             System.out.println("Physics:" + attack);
-            if(attack.direction == AttackDirection.BY_COL) {
+            if (attack.direction == AttackDirection.BY_COL) {
                 float camPosX = gameShared.cameraPosX.get().x;
                 //normalize
                 camPosX -= Constants.GAME_RECT.getWidth() / 2;
@@ -130,7 +141,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 //            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
 //                ().x) % ((int) Constants.GAME_RECT.width);
 //            System.out.print("delta: " + delta);
-            }else{
+            } else {
                 float attackY = Constants.GAME_RECT.height - attack.pos.y;
                 attackY -= 10;
                 attackY = attackY - attackY % 32;
@@ -156,6 +167,11 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         void createBlock(BlockCreateReq req) {
             Body blockBody = BodyFactory.createBlock(world, req.type, req.x, req.y);
             blocks.put(req.id, blockBody);
+        }
+
+        void createJumper(Integer id) {
+            System.out.println("create jumper at:");
+            jumpers.put(id, BodyFactory.createJumper(world, gameShared.jumpers.map(id)));
         }
     }
 }

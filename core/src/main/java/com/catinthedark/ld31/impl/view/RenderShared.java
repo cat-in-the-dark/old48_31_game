@@ -6,6 +6,9 @@ import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.level.LevelMatrix2;
 import com.catinthedark.ld31.lib.view.Renderable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by over on 06.12.14.
  */
@@ -25,4 +28,6 @@ public class RenderShared {
     public LevelMatrix2.View levelView = null;
     int lastMouseX = 0;
     int lastMouseY = 0;
+
+    public List<Integer> jumpersIds = new ArrayList<>();
 }

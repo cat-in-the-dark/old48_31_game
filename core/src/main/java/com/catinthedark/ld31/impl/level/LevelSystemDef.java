@@ -1,5 +1,8 @@
 package com.catinthedark.ld31.impl.level;
 
+import com.catinthedark.ld31.impl.bots.Jumper;
+import com.catinthedark.ld31.impl.bots.Shooter;
+import com.catinthedark.ld31.impl.bots.Walker;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.common.GameState;
@@ -14,15 +17,16 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.catinthedark.ld31.lib.util.SysUtils.conditional;
+
 /**
  * Created by over on 06.12.14.
  */
-public class LevelSystemDef extends AbstractSystemDef{
+public class LevelSystemDef extends AbstractSystemDef {
 
-    public LevelSystemDef(GameShared gameShared){
+    public LevelSystemDef(GameShared gameShared) {
         sys = new Sys(gameShared);
         //masterDelay = 16;
-        updater(conditional(() -> sys.state ==GameState.IN_GAME ,sys::update));
+        updater(conditional(() -> sys.state == GameState.IN_GAME, sys::update));
         createBlock = new Pipe<>();
         onGameStart = serialPort(sys::onGameStart);
         blockDestroyed = asyncPort(sys::blockDestroyed);
@@ -30,6 +34,9 @@ public class LevelSystemDef extends AbstractSystemDef{
 
     final Sys sys;
     public final Pipe<BlockCreateReq> createBlock;
+    public final Pipe<Integer> createJumper = new Pipe<>();
+    public final Pipe<Long> createWalker = new Pipe<>();
+    public final Pipe<Long> createShooter = new Pipe<>();
     public final Port<Nothing> onGameStart;
     public final Port<Long> blockDestroyed;
     private final Random rand = new Random();
@@ -53,13 +60,13 @@ public class LevelSystemDef extends AbstractSystemDef{
             });
         }
 
-        void update(float delay){
+        void update(float delay) {
             if (gameShared.pPos.get().x * 32 + 500 > currentX) {
                 addPreset();
             }
         }
 
-        void onGameStart(Nothing nothing){
+        void onGameStart(Nothing nothing) {
             state = GameState.IN_GAME;
             Assets.audios.noise_background.setVolume(0.5f);
             Assets.audios.noise_background.setLooping(true);
@@ -69,6 +76,8 @@ public class LevelSystemDef extends AbstractSystemDef{
         public void addPreset() {
             //Preset preset = Preset.presets[rand.nextInt(Preset.presets.length)];
             Preset preset = Preset.presets[0];
+
+            int presetX = currentX;
 
             for (BlockType[] col : preset.blocks) {
                 LevelMatrix2.ColMapper mapper = matrix.nextCol();
@@ -85,9 +94,15 @@ public class LevelSystemDef extends AbstractSystemDef{
                 }
                 currentX += 32;
             }
+            preset.jumpers.stream().map(j -> (Jumper) j.clone())
+                .forEach(j -> {
+                    j.pos.x += presetX / 32;
+                    int id = gameShared.jumpers.alloc(j);
+                    createJumper.write(id);
+                });
         }
 
-        void blockDestroyed(Long id){
+        void blockDestroyed(Long id) {
             blockMap.get(id).status = LevelBlock.STATUS.DESTROYED;
         }
 

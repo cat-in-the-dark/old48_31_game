@@ -2,6 +2,7 @@ package com.catinthedark.ld31.impl.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.catinthedark.ld31.impl.bots.Jumper;
 import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.level.BlockType;
 
@@ -48,5 +49,20 @@ public class BodyFactory {
         pFix.setFriction(Constants.FRICTION);
 
         return  playerBody;
+    }
+    public static Body createJumper(World world, Jumper jumper){
+        // TODO: add 2 more shapes on the left and right sides of player with friction = 0 to make player slide across walls sides
+        CircleShape playerShape = new CircleShape();
+        playerShape.setRadius(Constants.PLAYER_WIDTH / 2);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.fixedRotation = true;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(jumper.pos.x, jumper.pos.y);
+        Body jumperBody = world.createBody(bodyDef);
+        Fixture pFix = jumperBody.createFixture(playerShape, 0.1f);
+        pFix.setUserData(new PLayerUserData());
+        pFix.setFriction(Constants.FRICTION);
+
+        return  jumperBody;
     }
 }
