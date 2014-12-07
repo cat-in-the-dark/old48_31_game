@@ -46,7 +46,7 @@ public class GameScreen extends Screen<RenderShared> {
                 batch.begin();
                 shared.levelView.forEach(row -> {
                     for (LevelBlock block : row) {
-                        if (block != null) {
+                        if (block != null && block.status != LevelBlock.STATUS.DESTROYED) {
                             TextureRegion tex = null;
                             switch (block.type) {
                                 case BOTTOM:
@@ -65,7 +65,7 @@ public class GameScreen extends Screen<RenderShared> {
                     }
                 });
                 Vector2 pPos = shared.gameShared.pPos.get();
-                batch.draw(Assets.textures.childTexture, pPos.x * 32 - 16, pPos.y * 32 - 16);
+                batch.draw(Assets.textures.childTexture, pPos.x * 32 - 28, pPos.y * 32);
                 batch.end();
 
 

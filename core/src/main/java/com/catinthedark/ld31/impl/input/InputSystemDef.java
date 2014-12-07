@@ -49,25 +49,26 @@ public class InputSystemDef extends AbstractSystemDef {
                             attackDir = AttackDirection.BY_ROW;
                             break;
                     }
-                    if (attackDir != null) {
+//                    if (attackDir != null) {
+//                        if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE)) {
+//                            daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY +
+//                                Constants.WND_HEADER_SIZE),
+//                                attackDir));
+//
+//                        }
+//                    }
+
+                    if (attackDir != null)
                         if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE)) {
-                            daddyAttack.write(new DaddyAttack(new Vector2(screenX, screenY +
-                                Constants.WND_HEADER_SIZE),
+                            daddyAttack.write(new DaddyAttack(new Vector2(screenX - Constants
+                                .GAME_RECT.getX(), screenY +
+                                Constants.WND_HEADER_SIZE - Constants.GAME_RECT.getY()),
                                 attackDir));
                             defer(() -> {
                                 Assets.audios.hit_tv.play();
                                 Assets.audios.noise_sfx.play();
                             }, (int) (Constants.ATTACK_TIME * 1000));
                         }
-                    }
-
-                    if (attackDir != null)
-                        if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE))
-
-                            daddyAttack.write(new DaddyAttack(new Vector2(screenX - Constants
-                                .GAME_RECT.getX(), screenY +
-                                Constants.WND_HEADER_SIZE - Constants.GAME_RECT.getY()),
-                                attackDir));
                 }
                 return true;
             }

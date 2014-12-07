@@ -78,7 +78,9 @@ public class LevelSystemDef extends AbstractSystemDef{
                         continue;
                     }
                     blockIdSeq++;
-                    mapper.setCell(y, block.at(blockIdSeq, currentX, y * 32));
+                    LevelBlock lBlock = block.at(blockIdSeq, currentX, y * 32);
+                    mapper.setCell(y, lBlock);
+                    blockMap.put(blockIdSeq, lBlock);
                     createBlock.write(new BlockCreateReq(blockIdSeq, block, currentX / 32, y));
                 }
                 currentX += 32;
@@ -86,7 +88,7 @@ public class LevelSystemDef extends AbstractSystemDef{
         }
 
         void blockDestroyed(Long id){
-
+            blockMap.get(id).status = LevelBlock.STATUS.DESTROYED;
         }
 
 

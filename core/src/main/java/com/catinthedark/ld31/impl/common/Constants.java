@@ -12,7 +12,7 @@ public class Constants {
 	public static final int HARD = 3;
 	public static final int tileSize = 32;
 
-	public static final float PLAYER_WIDTH = 2.0f;
+	public static final float PLAYER_WIDTH = 1.0f;
 	public static final float PLAYER_HEIGHT = 2.0f;
 
 	public static final float CRAB_WIDTH = 2.0f;

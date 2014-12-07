@@ -35,7 +35,6 @@ public class Ld31 extends ApplicationAdapter {
             .handleDaddyAttack);
         inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
         levelSystem.createBlock.connect(physicsSystem.onCreateBlock);
-        inputSystem.playerJump.connect(physicsSystem.handlePlayerJump);
 
         gotoTutorial.connect(inputSystem.gotoTutorial, viewSystem.gotoTutorial);
         //gotoTutorial.connect(physicsSystem.onGameStart, levelSystem.onGameStart);
@@ -44,6 +43,8 @@ public class Ld31 extends ApplicationAdapter {
         inputSystem.gotoMenu.connect(viewSystem.gotoMenu);
         inputSystem.onGameStart.connect(physicsSystem.onGameStart, levelSystem.onGameStart,
             viewSystem.onGameStart);
+
+        physicsSystem.blockDestroyed.connect(levelSystem.blockDestroyed);
 
         Launcher.inThread(inputSystem);
         //Launcher.inThread(physicsSystem);

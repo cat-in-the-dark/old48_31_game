@@ -1,7 +1,10 @@
 package com.catinthedark.ld31.impl.physics;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.impl.level.LevelBlock;
@@ -54,6 +57,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         GameState state = GameState.INIT;
         float oldYVelocity = 0;
         boolean canJump = true;
+        Box2DDebugRenderer dbgRender = new Box2DDebugRenderer();
 
         void update(float delta) {
             world.step(delta, 6, 10);
@@ -62,6 +66,10 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 canJump = true;
             }
             oldYVelocity = playerBody.getLinearVelocity().y;
+            Camera cam = new OrthographicCamera(755/32,520/32);
+            cam.position.set(gameShared.cameraPosX.get().x / 32,gameShared.cameraPosX.get().y /32, 0);
+            cam.update();
+            dbgRender.render(world, cam.combined);
 
         }
 
