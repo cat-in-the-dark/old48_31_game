@@ -48,6 +48,7 @@ public class Assets {
         public Texture menu;
         public Texture gameWin;
         public Texture gameOver;
+        public Texture coolDownIndicator;
 
         @Override
         public void init() {
@@ -65,6 +66,7 @@ public class Assets {
             menu = new Texture(Gdx.files.internal("texture/menu.png"));
             gameOver = new Texture(Gdx.files.internal("texture/gameover.png"));
             gameWin = new Texture(Gdx.files.internal("texture/gamewin.png"));
+            coolDownIndicator = new Texture(Gdx.files.internal("texture/punch_ready.png"));
         }
     }
 

@@ -153,6 +153,26 @@ public class GameScreen extends Screen<RenderShared> {
                 batch.draw(Assets.textures.roomTex, 0, 0);
                 batch.end();
                 batch.begin();
+                if (shared.cooldownColAnimation != null) {
+                    boolean res = shared.cooldownColAnimation.render(batch);
+                    if (!res) {
+                        shared.cooldownColAnimation = null;
+                    }
+                } else {
+                    batch.draw(Assets.textures.coolDownIndicator,
+                            Constants.COOLDOWN_INDICATOR_COL_X,
+                            Constants.COOLDOWN_INDICATOR_COL_Y);
+                }
+                if (shared.cooldownRowAnimation != null) {
+                    boolean res = shared.cooldownRowAnimation.render(batch);
+                    if (!res) {
+                        shared.cooldownRowAnimation = null;
+                    }
+                } else {
+                    batch.draw(Assets.textures.coolDownIndicator,
+                            Constants.COOLDOWN_INDICATOR_ROW_X,
+                            Constants.COOLDOWN_INDICATOR_ROW_Y);
+                }
                 if(shared.dedFistAttackCol != null){
                     boolean res = shared.dedFistAttackCol.render(batch);
                     if(!res)

@@ -22,6 +22,8 @@ public class RenderShared {
     public Renderable colAttack;
     public Renderable dedFistAttackRow;
     public Renderable dedFistAttackCol;
+    public Renderable cooldownRowAnimation;
+    public Renderable cooldownColAnimation;
     public LevelMatrix2.View levelView = null;
     int lastMouseX = 0;
     int lastMouseY = 0;
