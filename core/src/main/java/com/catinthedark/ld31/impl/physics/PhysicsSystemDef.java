@@ -175,11 +175,14 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 //                    }
                     if(query(PLayerUserData.class, BotUserData.class, contact) != null){
                         gameShared.moralityLevel--;
+                        Assets.audios.ouch_enemy.play(0.5f);
                         System.out.println("playerHit");
                         System.out.println("moral: " + gameShared.moralityLevel);
                     }
                     if(query(PLayerUserData.class, BottleUserData.class, contact) != null){
                         gameShared.moralityLevel-= 10;
+                        Assets.audios.ouch_enemy.play(0.5f);
+                        System.out.println("playerHit");
                         System.out.println("playerHit bottle");
                     }
                     if(gameShared.moralityLevel < 0)
