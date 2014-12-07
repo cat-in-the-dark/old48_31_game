@@ -9,4 +9,6 @@ import com.catinthedark.ld31.lib.shm.SharedVal;
 public class GameShared {
     public SharedVal<Vector2> pPos = new SharedVal<>(new Vector2());
     public SharedVal<Vector2> cameraPosX = new SharedVal<>(new Vector2());
+    public int gameScore = 0;
+    public int moralityLevel = Constants.MAX_MORALITY_LEVEL;
 }

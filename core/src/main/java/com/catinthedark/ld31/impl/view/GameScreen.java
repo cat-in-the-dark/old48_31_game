@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.level.LevelBlock;
@@ -166,6 +167,11 @@ public class GameScreen extends Screen<RenderShared> {
                 }else {
                     batch.draw(Assets.textures.fistLeftTex, 0, OFFSET_Y - shared.lastMouseY);
                 }
+                Assets.fonts.hudFont.draw(batch, "Score: " + shared.gameShared.gameScore,
+                        Constants.HUD_LEFT, Constants.HUD_TOP + 50);
+
+                Assets.fonts.hudFont.draw(batch, "Morality: " + shared.gameShared.moralityLevel,
+                        Constants.HUD_LEFT, Constants.HUD_TOP + 80);
                 batch.end();
             }
         });

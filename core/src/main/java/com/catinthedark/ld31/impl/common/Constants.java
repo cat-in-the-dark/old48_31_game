@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
+    public static final int HUD_TOP = 10;
+    public static final int HUD_LEFT = 20;
+    public static final int MAX_MORALITY_LEVEL = 10;
     public static final float ATTACK_TIME = 0.3f;
     public static final Rectangle GAME_RECT = new Rectangle(340, 180, 755, 520);
 	public static final int WND_HEADER_SIZE = 10;
