@@ -51,6 +51,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<Nothing> onGameStart;
     public final Pipe<Long> blockDestroyed = new Pipe<>();
     public final Pipe<Integer> jumpersDestroyed = new Pipe<>(this);
+    public final Pipe<Integer> walkersDestroyed = new Pipe<>(this);
+    public final Pipe<Integer> shootersDestroyed = new Pipe<>(this);
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -182,6 +184,17 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 }
                 jumpersForRemove.forEach((id) -> jumpers.remove((Object) id));
 
+                List<Integer> walkersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : walkers.entrySet()) {
+                    if (Math.abs(camPosX / 32 + attackX - kv.getValue().getPosition().x) < 1) {
+                        world.destroyBody(kv.getValue());
+                        walkersForRemove.add(kv.getKey());
+                        walkersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.walkers.free(kv.getKey());
+                        });
+                    }
+                }
+                walkersForRemove.forEach((id) -> walkers.remove((Object) id));
 
 //            int delta = ((int) gameShared.cameraPosX.get().x) - ((int) gameShared.cameraPosX.get
 //                ().x) % ((int) Constants.GAME_RECT.width);
@@ -217,6 +230,18 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                     }
                 }
                 jumpersForRemove.forEach((id) -> jumpers.remove((Object) id));
+
+                List<Integer> walkersForRemove = new ArrayList<>();
+                for (Map.Entry<Integer, Body> kv : walkers.entrySet()) {
+                    if (Math.abs(attackY - kv.getValue().getPosition().y) < 1) {
+                        world.destroyBody(kv.getValue());
+                        walkersForRemove.add(kv.getKey());
+                        walkersDestroyed.write(kv.getKey(), () ->{
+                            gameShared.walkers.free(kv.getKey());
+                        });
+                    }
+                }
+                walkersForRemove.forEach((id) -> walkers.remove((Object) id));
             }
 
         }

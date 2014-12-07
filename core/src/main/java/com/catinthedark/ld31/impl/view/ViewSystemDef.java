@@ -9,12 +9,11 @@ import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Port;
 import com.catinthedark.ld31.lib.view.ScreenManager;
 
-import java.util.Objects;
-
 /**
  * Created by over on 06.12.14.
  */
 public class ViewSystemDef extends AbstractSystemDef {
+
     public ViewSystemDef(GameShared gameShared, LevelMatrix2.View levelView) {
         sys = new Sys(gameShared, levelView);
         updater(sys::render);
@@ -28,6 +27,7 @@ public class ViewSystemDef extends AbstractSystemDef {
         createShooter = serialPort(sys::createShooter);
         createWalker = serialPort(sys::createWalker);
         jumperDestroyed = serialPort(sys::jumperDestroyed);
+        walkerDestroyed = serialPort(sys::walkerDestroyed);
     }
 
     final Sys sys;
@@ -41,6 +41,7 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Integer> createShooter;
     public final Port<Integer> createWalker;
     public final Port<Integer> jumperDestroyed;
+    public final Port<Integer> walkerDestroyed;
 
     private class Sys {
         Sys(GameShared gameShared, LevelMatrix2.View levelView) {
@@ -101,7 +102,7 @@ public class ViewSystemDef extends AbstractSystemDef {
             renderShared.jumpersIds.add(id);
         }
         void createWalker(Integer id) {
-            renderShared.wolkersIds.add(id);
+            renderShared.walkerids.add(id);
         }
         void createShooter(Integer id) {
             renderShared.shootersIds.add(id);
@@ -112,6 +113,10 @@ public class ViewSystemDef extends AbstractSystemDef {
             System.out.println(String.format("remove jumper %d from view", id));
             renderShared.jumpersIds.remove((Object) id);
             System.out.println(renderShared.jumpersIds);
+        }
+
+        void walkerDestroyed(Integer id) {
+            renderShared.walkerids.remove((Object) id);
         }
 
         void gotoTutorial(Nothing none) {

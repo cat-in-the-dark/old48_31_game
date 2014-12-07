@@ -7,6 +7,7 @@ import com.catinthedark.ld31.lib.io.Port;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by over on 07.12.14.
@@ -22,6 +23,7 @@ public class AISystemDef extends AbstractSystemDef {
         createShooter = serialPort(sys::createShooter);
         createWalker = serialPort(sys::createWalker);
         destroyJumper = serialPort(sys::destroyJumper);
+        destroyWalker = serialPort(sys::destroyWalker);
     }
 
     final Sys sys;
@@ -29,6 +31,7 @@ public class AISystemDef extends AbstractSystemDef {
     public final Port<Integer> createShooter;
     public final Port<Integer> createWalker;
     public final Port<Integer> destroyJumper;
+    public final Port<Integer> destroyWalker;
     public final Pipe<Integer> jumperJump = new Pipe<>();
     public final Pipe<Integer> walkerGo = new Pipe<>();
 
@@ -76,6 +79,10 @@ public class AISystemDef extends AbstractSystemDef {
 
         void destroyJumper(Integer id) {
             jumpersIds.remove((Object) id);
+        }
+
+        void destroyWalker(Integer id) {
+            walkersIds.remove((Object) id);
         }
 
         void createShooter(Integer id) {
