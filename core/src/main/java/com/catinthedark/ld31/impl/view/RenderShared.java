@@ -34,4 +34,5 @@ public class RenderShared {
     public List<Integer> shootersIds = new ArrayList<>();
     public List<Integer> wolkersIds = new ArrayList<>();
     public List<Integer> jumpersIds = new ArrayList<>();
+    public List<Integer> bottlesIds = new ArrayList<>();
 }

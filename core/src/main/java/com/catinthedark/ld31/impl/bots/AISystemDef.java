@@ -31,6 +31,7 @@ public class AISystemDef extends AbstractSystemDef {
     public final Port<Integer> destroyJumper;
     public final Pipe<Integer> jumperJump = new Pipe<>();
     public final Pipe<Integer> walkerGo = new Pipe<>();
+    public final Pipe<Integer> shooterShoot = new Pipe<>();
 
     private class Sys {
         Sys(GameShared shared) {
@@ -62,6 +63,19 @@ public class AISystemDef extends AbstractSystemDef {
                 if (Math.abs(walker.pos.x - shared.pPos.get().x) < 10) {
                     System.out.println("walker(" + jid + ") active");
                     walkerGo.write(jid);
+                }
+            });
+
+            shootersIds.forEach(jid -> {
+                Shooter shooter = shared.shooters.map(jid);
+                if (Math.abs(shooter.pos.x - shared.pPos.get().x) < 10 && shooter.state == Shooter.State.QUIET) {
+                    System.out.println("shooter(" + jid + ") active");
+                    shooter.state = Shooter.State.SHOOT;
+                    shooterShoot.write(jid);
+                    defer(() -> {
+                        shooter.state = Shooter.State.QUIET;
+                    }, 1100);
+
                 }
             });
         }

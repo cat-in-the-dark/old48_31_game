@@ -2,6 +2,7 @@ package com.catinthedark.ld31.impl.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.catinthedark.ld31.impl.bots.Bottle;
 import com.catinthedark.ld31.impl.bots.Jumper;
 import com.catinthedark.ld31.impl.bots.Shooter;
 import com.catinthedark.ld31.impl.bots.Walker;
@@ -98,5 +99,20 @@ public class BodyFactory {
         pFix.setFriction(Constants.FRICTION);
 
         return  jumperBody;
+    }
+
+    public static Body createBottle(World world, Vector2 pos, int id){
+        PolygonShape shape  = new PolygonShape();
+        shape.setAsBox(0.5f, 0.25f);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.fixedRotation = false;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(pos.x, pos.y);
+        Body bottleBody = world.createBody(bodyDef);
+        Fixture pFix = bottleBody.createFixture(shape, 0.1f);
+        pFix.setUserData(new BottleUserData(id));
+        pFix.setFriction(Constants.FRICTION);
+
+        return  bottleBody;
     }
 }

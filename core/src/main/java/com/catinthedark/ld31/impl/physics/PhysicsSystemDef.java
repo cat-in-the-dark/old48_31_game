@@ -3,9 +3,8 @@ package com.catinthedark.ld31.impl.physics;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import com.catinthedark.ld31.impl.bots.Bottle;
 import com.catinthedark.ld31.impl.bots.Walker;
 import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.impl.message.BlockCreateReq;
@@ -17,6 +16,7 @@ import com.catinthedark.ld31.lib.io.Port;
 import java.util.*;
 
 import static com.catinthedark.ld31.lib.util.SysUtils.conditional;
+import static com.catinthedark.ld31.lib.util.ContactUtils.query;
 
 /**
  * Created by over on 06.12.14.
@@ -35,6 +35,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         createWalker = serialPort(sys::createShooter);
         walkerWalk = asyncPort(sys::walkerGo);
         createShooter = serialPort(sys::createWalker);
+        shooterShoot = serialPort(sys::shooterShoot);
         onGameStart = serialPort(sys::onGameStart);
     }
 
@@ -47,10 +48,13 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<Integer> createWalker;
     public final Port<Integer> walkerWalk;
     public final Port<Integer> createShooter;
+    public final Port<Integer> shooterShoot;
     public final Port<Nothing> handlePlayerJump;
     public final Port<Nothing> onGameStart;
     public final Pipe<Long> blockDestroyed = new Pipe<>();
     public final Pipe<Integer> jumpersDestroyed = new Pipe<>(this);
+    public final Pipe<Integer> bottleCreated = new Pipe<>();
+    public final Pipe<Integer> bottleDestroyed = new Pipe<>(this);
 
     private class Sys {
         Sys(GameShared gameShared) {
@@ -69,6 +73,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         public Map<Integer, Body> jumpers = new HashMap<>();
         public Map<Integer, Body> walkers = new HashMap<>();
         public Map<Integer, Body> shooters = new HashMap<>();
+        public Map<Integer, Body> bottles = new HashMap<>();
 
         void update(float delta) {
             world.step(delta, 6, 100);
@@ -96,6 +101,12 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 });
             });
 
+            bottles.entrySet().forEach((kv) -> {
+                gameShared.bottles.update(kv.getKey(), (s) -> {
+                    s.pos.set(kv.getValue().getPosition());
+                });
+            });
+
             float camPosX = gameShared.cameraPosX.get().x;
             if (playerBody.getPosition().x * 32 + Constants.GAME_RECT.x < camPosX) {
                 playerBody.setLinearVelocity(0, playerBody.getLinearVelocity().y);
@@ -115,6 +126,46 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             if (world != null)
                 world.dispose();
             world = new World(new Vector2(0, Constants.WORLD_GRAVITY), true);
+            world.setContactListener(new ContactListener() {
+                @Override
+                public void beginContact(Contact contact) {
+//                    BottleUserData bottleData = null;
+//
+//                    if(contact.getFixtureA().getUserData() != null &&
+//                        contact.getFixtureA().getUserData().getClass() == BottleUserData.class){
+//                        bottleData = (BottleUserData) contact.getFixtureA().getUserData();
+//                    }else if(contact.getFixtureB().getUserData() != null &&
+//                        contact.getFixtureB().getUserData().getClass() == BottleUserData.class ){
+//                        bottleData = (BottleUserData) contact.getFixtureB().getUserData();
+//                    }
+//                    if(bottleData != null){
+//                        if(!bottleData.destroyed) {
+//                            final int id = bottleData.id;
+//                            bottleData.destroyed = true;
+//                            bottleDestroyed.write(id, () -> {
+//                                world.destroyBody(bottles.get(id));
+//                                bottles.remove(id);
+//                                gameShared.bottles.free(id);
+//                            });
+//                        }
+//                    }
+                }
+
+                @Override
+                public void endContact(Contact contact) {
+
+                }
+
+                @Override
+                public void preSolve(Contact contact, Manifold oldManifold) {
+
+                }
+
+                @Override
+                public void postSolve(Contact contact, ContactImpulse impulse) {
+
+                }
+            });
             playerBody = BodyFactory.createPlayer(world);
             state = GameState.IN_GAME;
         }
@@ -276,6 +327,36 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 wVec = Constants.WALKING_FORCE_RIGHT;
 
             wBody.applyLinearImpulse(wVec.cpy().scl(0.2f), new Vector2(0,0), true);
+        }
+
+        void shooterShoot(Integer id){
+            Body sBody = shooters.get(id);
+            //possible deleted
+            if(sBody == null)
+                return;
+
+            Vector2 sVec = null;
+            if(playerBody.getPosition().x > sBody.getPosition().x)
+                sVec = Constants.SHOOT_IMPULSE_RIGHT;
+            else
+                sVec = Constants.SHOOT_IMPULSE_LEFT;
+            Integer ptr = gameShared.bottles.alloc(new Bottle());
+            Vector2 bPos = sBody.getPosition().cpy();
+            bPos.x -= 1;
+            bPos.y += 1;
+            Body bBody = BodyFactory.createBottle(world, bPos, ptr);
+            bottleCreated.write(ptr);
+            bottles.put(ptr, bBody);
+            bBody.applyLinearImpulse(sVec.cpy().scl(0.2f), new
+                Vector2(0, 0), true);
+
+            defer(() -> {
+                world.destroyBody(bottles.get(ptr));
+                bottles.remove(ptr);
+                bottleDestroyed.write(ptr, () -> {
+                    gameShared.bottles.free(ptr);
+                });
+            },1000);
         }
     }
 }

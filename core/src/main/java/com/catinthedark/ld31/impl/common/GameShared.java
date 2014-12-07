@@ -1,6 +1,7 @@
 package com.catinthedark.ld31.impl.common;
 
 import com.badlogic.gdx.math.Vector2;
+import com.catinthedark.ld31.impl.bots.Bottle;
 import com.catinthedark.ld31.impl.bots.Jumper;
 import com.catinthedark.ld31.impl.bots.Shooter;
 import com.catinthedark.ld31.impl.bots.Walker;
@@ -18,5 +19,6 @@ public class GameShared {
     public SharedPool<Walker> walkers = new SharedPool<>(Walker.class, 20);
     public SharedPool<Shooter> shooters = new SharedPool<>(Shooter.class, 20);
     public SharedPool<Jumper> jumpers = new SharedPool<>(Jumper.class, 20);
+    public SharedPool<Bottle> bottles = new SharedPool<>(Bottle.class, 20);
 
 }

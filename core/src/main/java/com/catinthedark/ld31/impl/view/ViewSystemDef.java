@@ -27,6 +27,8 @@ public class ViewSystemDef extends AbstractSystemDef {
         createJumper = serialPort(sys::createJumper);
         createShooter = serialPort(sys::createShooter);
         createWalker = serialPort(sys::createWalker);
+        createBottle = serialPort(sys::createBottle);
+        bottleDestroyed = serialPort(sys::bottleDestroyed);
         jumperDestroyed = serialPort(sys::jumperDestroyed);
     }
 
@@ -40,6 +42,8 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Integer> createJumper;
     public final Port<Integer> createShooter;
     public final Port<Integer> createWalker;
+    public final Port<Integer> createBottle;
+    public final Port<Integer> bottleDestroyed;
     public final Port<Integer> jumperDestroyed;
 
     private class Sys {
@@ -106,12 +110,19 @@ public class ViewSystemDef extends AbstractSystemDef {
         void createShooter(Integer id) {
             renderShared.shootersIds.add(id);
         }
+        void createBottle(Integer id) {
+            renderShared.bottlesIds.add(id);
+        }
 
         void jumperDestroyed(Integer id) {
             System.out.println(renderShared.jumpersIds);
             System.out.println(String.format("remove jumper %d from view", id));
             renderShared.jumpersIds.remove((Object) id);
             System.out.println(renderShared.jumpersIds);
+        }
+
+        void bottleDestroyed(Integer id) {
+            renderShared.bottlesIds.remove((Object) id);
         }
 
         void gotoTutorial(Nothing none) {

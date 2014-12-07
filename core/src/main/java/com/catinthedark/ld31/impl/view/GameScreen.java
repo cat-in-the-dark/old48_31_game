@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.catinthedark.ld31.impl.bots.Bottle;
 import com.catinthedark.ld31.impl.bots.Jumper;
 import com.catinthedark.ld31.impl.bots.Shooter;
 import com.catinthedark.ld31.impl.bots.Walker;
@@ -84,6 +85,12 @@ public class GameScreen extends Screen<RenderShared> {
                 });
                 Vector2 pPos = shared.gameShared.pPos.get();
                 batch.draw(Assets.textures.childTexture, pPos.x * 32 - 28, pPos.y * 32);
+
+                shared.bottlesIds.forEach(jid -> {
+                    Bottle bottle = shared.gameShared.bottles.map(jid);
+                    batch.draw(Assets.textures.bottle, bottle.pos.x * 32 - 28, bottle.pos.y * 32);
+                });
+
                 batch.end();
 
 

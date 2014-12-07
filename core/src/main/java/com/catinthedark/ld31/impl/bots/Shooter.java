@@ -11,6 +11,7 @@ public class Shooter {
     }
 
     public Vector2 pos = new Vector2();
+    State state = State.QUIET;
 
     public Shooter(float x, float y) {
         pos.set(x, y);

@@ -57,6 +57,9 @@ public class Ld31 extends ApplicationAdapter {
 
         aiSystem.jumperJump.connect(physicsSystem.jumperJump);
         aiSystem.walkerGo.connect(physicsSystem.walkerWalk);
+        aiSystem.shooterShoot.connect(physicsSystem.shooterShoot);
+        physicsSystem.bottleCreated.connect(viewSystem.createBottle);
+        physicsSystem.bottleDestroyed.connect(viewSystem.bottleDestroyed);
         physicsSystem.jumpersDestroyed.connect(viewSystem.jumperDestroyed, aiSystem.destroyJumper);
 
         Launcher.inThread(inputSystem);
