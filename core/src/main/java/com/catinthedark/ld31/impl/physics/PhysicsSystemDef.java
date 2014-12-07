@@ -75,6 +75,11 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 });
             });
 
+            float camPosX = gameShared.cameraPosX.get().x;
+            if (playerBody.getPosition().x * 32 + Constants.GAME_RECT.x < camPosX) {
+                playerBody.setLinearVelocity(0, playerBody.getLinearVelocity().y);
+                playerBody.getPosition().set((camPosX - Constants.GAME_RECT.x) / 32 + 1, playerBody.getPosition().y);
+            }
 
             Camera cam = new OrthographicCamera(755 / 32, 520 / 32);
             cam.position.set(gameShared.cameraPosX.get().x / 32, gameShared.cameraPosX.get().y /
@@ -95,9 +100,13 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void handlePlayerMove(DirectionX dir) {
             if (dir == DirectionX.LEFT) {
-                if (playerBody.getLinearVelocity().x > -10)
-                    playerBody.applyLinearImpulse(Constants.WALKING_FORCE_LEFT, new Vector2(0,
-                            0), true);
+                float camPosX = gameShared.cameraPosX.get().x;
+                if (playerBody.getPosition().x * 32 + Constants.GAME_RECT.x > camPosX) {
+                    if (playerBody.getLinearVelocity().x > -10) {
+                        playerBody.applyLinearImpulse(Constants.WALKING_FORCE_LEFT, new Vector2(0,
+                                0), true);
+                    }
+                }
             } else {
                 if (playerBody.getLinearVelocity().x < 10)
                     playerBody.applyLinearImpulse(Constants.WALKING_FORCE_RIGHT, new Vector2(0,
