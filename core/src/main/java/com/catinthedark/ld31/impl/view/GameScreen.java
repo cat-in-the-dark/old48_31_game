@@ -181,7 +181,7 @@ public class GameScreen extends Screen<RenderShared> {
                         shared.cooldownColAnimation = null;
                     }
                 } else {
-                    batch.draw(Assets.textures.coolDownIndicator,
+                    batch.draw(Assets.textures.coolDownIndicatorCol,
                             Constants.COOLDOWN_INDICATOR_COL_X,
                             Constants.COOLDOWN_INDICATOR_COL_Y);
                 }
@@ -191,7 +191,7 @@ public class GameScreen extends Screen<RenderShared> {
                         shared.cooldownRowAnimation = null;
                     }
                 } else {
-                    batch.draw(Assets.textures.coolDownIndicator,
+                    batch.draw(Assets.textures.coolDownIndicatorRow,
                             Constants.COOLDOWN_INDICATOR_ROW_X,
                             Constants.COOLDOWN_INDICATOR_ROW_Y);
                 }

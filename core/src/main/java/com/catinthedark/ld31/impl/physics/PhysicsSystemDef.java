@@ -83,8 +83,6 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             gameShared.pPos.update((pos) -> pos.set(playerBody.getPosition()));
             if (playerBody.getLinearVelocity().y == 0 && oldYVelocity == 0) {
                 canJump = true;
-            } else {
-                canJump = false;
             }
             oldYVelocity = playerBody.getLinearVelocity().y;
 

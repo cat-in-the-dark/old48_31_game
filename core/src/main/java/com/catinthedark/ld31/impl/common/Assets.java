@@ -56,7 +56,8 @@ public class Assets {
         public Texture menu;
         public Texture gameWin;
         public Texture gameOver;
-        public Texture coolDownIndicator;
+        public Texture coolDownIndicatorCol;
+        public Texture coolDownIndicatorRow;
         public TextureRegion gopFrames[][];
         public Texture gopAnimFrame;
 
@@ -81,7 +82,8 @@ public class Assets {
             menu = new Texture(Gdx.files.internal("texture/menu.png"));
             gameOver = new Texture(Gdx.files.internal("texture/gameover.png"));
             gameWin = new Texture(Gdx.files.internal("texture/gamewin.png"));
-            coolDownIndicator = new Texture(Gdx.files.internal("texture/punch_ready.png"));
+            coolDownIndicatorCol = new Texture(Gdx.files.internal("texture/punch_ready_col.png"));
+            coolDownIndicatorRow = new Texture(Gdx.files.internal("texture/punch_ready_row.png"));
             gopFrames = TextureRegion.split(gopAnimFrame, 120, 128);
         }
     }

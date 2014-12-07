@@ -108,16 +108,16 @@ public class RenderFactory {
             float stateTime = 0; // seconds
             @Override
             public boolean render(SpriteBatch batch) {
-                batch.draw(Assets.textures.coolDownIndicator,
+                batch.draw(Assets.textures.coolDownIndicatorCol,
                         Constants.COOLDOWN_INDICATOR_COL_X,
                         Constants.COOLDOWN_INDICATOR_COL_Y,
-                        Assets.textures.coolDownIndicator.getWidth() / 2,
-                        Assets.textures.coolDownIndicator.getHeight() / 2,
-                        Assets.textures.coolDownIndicator.getWidth(), Assets.textures.coolDownIndicator.getHeight(),
+                        Assets.textures.coolDownIndicatorCol.getWidth() / 2,
+                        Assets.textures.coolDownIndicatorCol.getHeight() / 2,
+                        Assets.textures.coolDownIndicatorCol.getWidth(), Assets.textures.coolDownIndicatorCol.getHeight(),
                         1, 1,
-                        (stateTime * 1000 * 360 / Constants.COOLDOWN_COL_TIME),
+                        (360 - stateTime * 1000 * 360 / Constants.COOLDOWN_COL_TIME),
                         0, 0,
-                        Assets.textures.coolDownIndicator.getWidth(), Assets.textures.coolDownIndicator.getHeight(),
+                        Assets.textures.coolDownIndicatorCol.getWidth(), Assets.textures.coolDownIndicatorCol.getHeight(),
                         false, false
                         );
                 stateTime += renderShared.delay;
@@ -136,16 +136,16 @@ public class RenderFactory {
             float stateTime = 0; // seconds
             @Override
             public boolean render(SpriteBatch batch) {
-                batch.draw(Assets.textures.coolDownIndicator,
+                batch.draw(Assets.textures.coolDownIndicatorRow,
                         Constants.COOLDOWN_INDICATOR_ROW_X,
                         Constants.COOLDOWN_INDICATOR_ROW_Y,
-                        Assets.textures.coolDownIndicator.getWidth() / 2,
-                        Assets.textures.coolDownIndicator.getHeight() / 2,
-                        Assets.textures.coolDownIndicator.getWidth(), Assets.textures.coolDownIndicator.getHeight(),
+                        Assets.textures.coolDownIndicatorRow.getWidth() / 2,
+                        Assets.textures.coolDownIndicatorRow.getHeight() / 2,
+                        Assets.textures.coolDownIndicatorRow.getWidth(), Assets.textures.coolDownIndicatorRow.getHeight(),
                         1, 1,
-                        (stateTime * 1000 * 360 / Constants.COOLDOWN_ROW_TIME),
+                        (360 - stateTime * 1000 * 360 / Constants.COOLDOWN_ROW_TIME),
                         0, 0,
-                        Assets.textures.coolDownIndicator.getWidth(), Assets.textures.coolDownIndicator.getHeight(),
+                        Assets.textures.coolDownIndicatorRow.getWidth(), Assets.textures.coolDownIndicatorRow.getHeight(),
                         false, false
                 );
                 stateTime += renderShared.delay;
