@@ -79,10 +79,10 @@ public class Assets {
             runningStringTR = TextureRegion.split(runningStringTex, 32, 32); //156 x 4 tiles (normal + glithed versions)
             roomTex = new Texture(Gdx.files.internal("texture/room.png"));
             logo = new Texture(Gdx.files.internal("texture/logo.png"));
-            t1 = new Texture(Gdx.files.internal("texture/t1.png"));
-            t2 = new Texture(Gdx.files.internal("texture/t2.png"));
-            t3 = new Texture(Gdx.files.internal("texture/t3.png"));
-            menu = new Texture(Gdx.files.internal("texture/menu.png"));
+            t1 = new Texture(Gdx.files.internal("texture/menu.png"));
+            t2 = new Texture(Gdx.files.internal("texture/t1.png"));
+            t3 = new Texture(Gdx.files.internal("texture/t2.png"));
+            menu = new Texture(Gdx.files.internal("texture/t3.png"));
             gameOver = new Texture(Gdx.files.internal("texture/gameover.png"));
             gameWin = new Texture(Gdx.files.internal("texture/gamewin.png"));
             coolDownIndicatorCol = new Texture(Gdx.files.internal("texture/punch_ready_col.png"));
