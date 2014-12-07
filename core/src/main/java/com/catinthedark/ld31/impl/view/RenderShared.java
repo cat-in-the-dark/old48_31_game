@@ -31,5 +31,7 @@ public class RenderShared {
     int lastMouseX = 0;
     int lastMouseY = 0;
 
+    public List<Integer> shootersIds = new ArrayList<>();
+    public List<Integer> wolkersIds = new ArrayList<>();
     public List<Integer> jumpersIds = new ArrayList<>();
 }

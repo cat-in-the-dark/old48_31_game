@@ -35,8 +35,8 @@ public class LevelSystemDef extends AbstractSystemDef {
     final Sys sys;
     public final Pipe<BlockCreateReq> createBlock;
     public final Pipe<Integer> createJumper = new Pipe<>();
-    public final Pipe<Long> createWalker = new Pipe<>();
-    public final Pipe<Long> createShooter = new Pipe<>();
+    public final Pipe<Integer> createWalker = new Pipe<>();
+    public final Pipe<Integer> createShooter = new Pipe<>();
     public final Port<Nothing> onGameStart;
     public final Port<Long> blockDestroyed;
     private final Random rand = new Random();
@@ -99,6 +99,20 @@ public class LevelSystemDef extends AbstractSystemDef {
                     j.pos.x += presetX / 32;
                     int id = gameShared.jumpers.alloc(j);
                     createJumper.write(id);
+                });
+
+            preset.walkers.stream().map(j -> (Walker) j.clone())
+                .forEach(j -> {
+                    j.pos.x += presetX / 32;
+                    int id = gameShared.walkers.alloc(j);
+                    createWalker.write(id);
+                });
+
+            preset.shooters.stream().map(j -> (Shooter) j.clone())
+                .forEach(j -> {
+                    j.pos.x += presetX / 32;
+                    int id = gameShared.shooters.alloc(j);
+                    createShooter.write(id);
                 });
         }
 

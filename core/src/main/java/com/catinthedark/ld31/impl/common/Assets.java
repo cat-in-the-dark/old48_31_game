@@ -41,6 +41,7 @@ public class Assets {
         public Texture childTexture;
         public Texture pedofil;
         public Texture lady;
+        public Texture gop;
         public TextureRegion[][] runningStringTR;
         public Texture roomTex;
         public Texture logo;
@@ -59,6 +60,7 @@ public class Assets {
             childTexture = new Texture(Gdx.files.internal("texture/child.png"));
             pedofil = new Texture(Gdx.files.internal("texture/pedofil.png"));
             lady = new Texture(Gdx.files.internal("texture/lady.png"));
+            gop = new Texture(Gdx.files.internal("texture/gopstop.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
             Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
             runningStringTR = TextureRegion.split(runningStringTex, 32, 32); //156 x 4 tiles (normal + glithed versions)

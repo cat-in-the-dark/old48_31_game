@@ -58,7 +58,7 @@ public class Preset {
             {1, 2, 0},
             {1, 2, 0},
             {1, 2, 0}
-        }, Arrays.asList(new Jumper(4f,10f)), Arrays.asList(new Walker()), Arrays.asList(new Shooter())),
+        }, Arrays.asList(new Jumper(4f,10f)), Arrays.asList(new Walker(6f,10f)), Arrays.asList(new Shooter(7f,10f))),
         new Preset(new int[][]{
             {1, 2, 0, 0, 0, 0, 0},
             {1, 2, 0, 0, 0, 0, 0},
@@ -86,6 +86,6 @@ public class Preset {
             {1, 2, 0, 0, 0, 0, 0},
             {1, 2, 0, 0, 0, 0, 0},
             {1, 2, 0, 0, 0, 0, 0}
-        }, Arrays.asList(new Jumper(4f, 10f)), Arrays.asList(new Walker()), Arrays.asList(new Shooter()))
+        }, Arrays.asList(new Jumper(4f, 10f)), Arrays.asList(new Walker(6f,10f)), Arrays.asList(new Shooter(7f,10f)))
     };
 }

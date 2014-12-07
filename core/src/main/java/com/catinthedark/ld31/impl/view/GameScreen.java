@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.catinthedark.ld31.impl.bots.Jumper;
+import com.catinthedark.ld31.impl.bots.Shooter;
+import com.catinthedark.ld31.impl.bots.Walker;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.level.LevelBlock;
@@ -69,6 +71,16 @@ public class GameScreen extends Screen<RenderShared> {
                 shared.jumpersIds.forEach(jid -> {
                     Jumper jumper = shared.gameShared.jumpers.map(jid);
                     batch.draw(Assets.textures.pedofil, jumper.pos.x * 32 - 28, jumper.pos.y * 32);
+                });
+
+                shared.wolkersIds.forEach(jid -> {
+                    Walker walker = shared.gameShared.walkers.map(jid);
+                    batch.draw(Assets.textures.lady, walker.pos.x * 32 - 28, walker.pos.y * 32);
+                });
+
+                shared.shootersIds.forEach(jid -> {
+                    Shooter shooter = shared.gameShared.shooters.map(jid);
+                    batch.draw(Assets.textures.gop, shooter.pos.x * 32 - 28, shooter.pos.y * 32);
                 });
                 Vector2 pPos = shared.gameShared.pPos.get();
                 batch.draw(Assets.textures.childTexture, pPos.x * 32 - 28, pPos.y * 32);

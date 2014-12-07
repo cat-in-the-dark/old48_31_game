@@ -33,6 +33,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
         onCreateBlock = asyncPort(sys::createBlock);
         createJumper = serialPort(sys::createJumper);
+        createWalker = serialPort(sys::createShooter);
+        createShooter = serialPort(sys::createWalker);
         onGameStart = serialPort(sys::onGameStart);
     }
 
@@ -41,6 +43,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<DaddyAttack> handleDaddyAttack;
     public final Port<BlockCreateReq> onCreateBlock;
     public final Port<Integer> createJumper;
+    public final Port<Integer> createWalker;
+    public final Port<Integer> createShooter;
     public final Port<Nothing> handlePlayerJump;
     public final Port<Nothing> onGameStart;
     public final Pipe<Long> blockDestroyed = new Pipe();
@@ -60,6 +64,8 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         boolean canJump = true;
         Box2DDebugRenderer dbgRender = new Box2DDebugRenderer();
         public Map<Integer, Body> jumpers = new HashMap<>();
+        public Map<Integer, Body> walkers = new HashMap<>();
+        public Map<Integer, Body> shooters = new HashMap<>();
 
         void update(float delta) {
             world.step(delta, 6, 10);
@@ -72,6 +78,18 @@ public class PhysicsSystemDef extends AbstractSystemDef {
             jumpers.entrySet().forEach((kv) -> {
                 gameShared.jumpers.update(kv.getKey(), (j) -> {
                     j.pos.set(kv.getValue().getPosition());
+                });
+            });
+
+            walkers.entrySet().forEach((kv) -> {
+                gameShared.walkers.update(kv.getKey(), (w) -> {
+                    w.pos.set(kv.getValue().getPosition());
+                });
+            });
+
+            shooters.entrySet().forEach((kv) -> {
+                gameShared.shooters.update(kv.getKey(), (s) -> {
+                    s.pos.set(kv.getValue().getPosition());
                 });
             });
 
@@ -173,8 +191,14 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         }
 
         void createJumper(Integer id) {
-            System.out.println("create jumper at:");
             jumpers.put(id, BodyFactory.createJumper(world, gameShared.jumpers.map(id)));
+        }
+
+        void createWalker(Integer id) {
+            walkers.put(id, BodyFactory.createWalker(world, gameShared.walkers.map(id)));
+        }
+        void createShooter(Integer id) {
+            shooters.put(id, BodyFactory.createShooter(world, gameShared.shooters.map(id)));
         }
     }
 }
