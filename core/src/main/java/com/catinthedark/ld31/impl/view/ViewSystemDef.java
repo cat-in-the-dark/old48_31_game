@@ -9,6 +9,8 @@ import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Port;
 import com.catinthedark.ld31.lib.view.ScreenManager;
 
+import java.util.Objects;
+
 /**
  * Created by over on 06.12.14.
  */
@@ -23,6 +25,7 @@ public class ViewSystemDef extends AbstractSystemDef {
         gotoMenu = serialPort(sys::gotoMenu);
         onGameStart = serialPort(sys::onGameStart);
         createJumper = serialPort(sys::createJumper);
+        jumperDestroyed = serialPort(sys::jumperDestroyed);
     }
 
     final Sys sys;
@@ -33,6 +36,7 @@ public class ViewSystemDef extends AbstractSystemDef {
     public final Port<Nothing> gotoMenu;
     public final Port<Nothing> onGameStart;
     public final Port<Integer> createJumper;
+    public final Port<Integer> jumperDestroyed;
 
     private class Sys {
         Sys(GameShared gameShared, LevelMatrix2.View levelView) {
@@ -91,6 +95,10 @@ public class ViewSystemDef extends AbstractSystemDef {
 
         void createJumper(Integer id){
             renderShared.jumpersIds.add(id);
+        }
+
+        void jumperDestroyed(Integer id) {
+            renderShared.jumpersIds.remove((Object) id);
         }
 
         void gotoTutorial(Nothing none) {
