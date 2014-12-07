@@ -299,8 +299,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 jVec = Constants.JUMP_IMPULSE_PEDO_RIGHT;
             else
                 jVec = Constants.JUMP_IMPULSE_PEDO_LEFT;
-            jBody.applyLinearImpulse(jVec.cpy().scl(0.5f), new
-                Vector2(0, 0), true);
+            jBody.applyLinearImpulse(jVec, new Vector2(0, 0), true);
         }
 
 
