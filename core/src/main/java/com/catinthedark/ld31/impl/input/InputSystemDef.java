@@ -7,11 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
-import com.catinthedark.ld31.lib.common.RunnableEx;
 import com.catinthedark.ld31.lib.io.Pipe;
 import com.catinthedark.ld31.lib.io.Port;
-
-import java.awt.*;
 
 /**
  * Created by over on 06.12.14.
@@ -34,8 +31,9 @@ public class InputSystemDef extends AbstractSystemDef {
         updater(sys::pollMove);
         gotoTutorial = serialPort(sys::gotoTutorial);
 
-
         Gdx.input.setInputProcessor(new InputAdapter() {
+            boolean canColAttack = true;
+            boolean canRowAttack = true;
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -58,8 +56,20 @@ public class InputSystemDef extends AbstractSystemDef {
 //                        }
 //                    }
 
-                    if (attackDir != null)
-                        if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE)) {
+                    if (Constants.GAME_RECT.contains(screenX, screenY + Constants.WND_HEADER_SIZE)) {
+                        if (canColAttack && attackDir == AttackDirection.BY_COL) {
+                            canColAttack = false;
+                            daddyAttack.write(new DaddyAttack(new Vector2(screenX - Constants
+                                    .GAME_RECT.getX(), screenY +
+                                    Constants.WND_HEADER_SIZE - Constants.GAME_RECT.getY()),
+                                    attackDir));
+                            defer(() -> {
+                                Assets.audios.hit_tv.play();
+                                Assets.audios.noise_sfx.play();
+                            }, (int) (Constants.ATTACK_TIME * 1000));
+                            defer(() -> canColAttack = true, Constants.COOLDOWN_COL_TIME);
+                        } else if (canRowAttack && attackDir == AttackDirection.BY_ROW) {
+                            canRowAttack = false;
                             daddyAttack.write(new DaddyAttack(new Vector2(screenX - Constants
                                 .GAME_RECT.getX(), screenY +
                                 (2*Constants.WND_HEADER_SIZE + 10) - Constants.GAME_RECT.getY()),
@@ -68,7 +78,9 @@ public class InputSystemDef extends AbstractSystemDef {
                                 Assets.audios.hit_tv.play();
                                 Assets.audios.noise_sfx.play();
                             }, (int) (Constants.ATTACK_TIME * 1000));
+                            defer(() -> canRowAttack = true, Constants.COOLDOWN_ROW_TIME);
                         }
+                    }
                 }
                 return true;
             }

@@ -95,6 +95,9 @@ public class PhysicsSystemDef extends AbstractSystemDef {
 
         void handlePlayerMove(DirectionX dir) {
             if (dir == DirectionX.LEFT) {
+                if (playerBody.getLinearVelocity().x > -10)
+                    playerBody.applyLinearImpulse(Constants.WALKING_FORCE_LEFT, new Vector2(0,
+                            0), true);
             } else {
                 if (playerBody.getLinearVelocity().x < 10)
                     playerBody.applyLinearImpulse(Constants.WALKING_FORCE_RIGHT, new Vector2(0,

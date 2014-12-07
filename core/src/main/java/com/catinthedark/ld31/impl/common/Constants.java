@@ -4,6 +4,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
+    public static final int COOLDOWN_INDICATOR_COL_X = 1150;
+    public static final int COOLDOWN_INDICATOR_COL_Y = 475;
+    public static final int COOLDOWN_INDICATOR_ROW_X = 1150;
+    public static final int COOLDOWN_INDICATOR_ROW_Y = 200;
+    public static final int COOLDOWN_ROW_TIME = 1500; // ms
+    public static final int COOLDOWN_COL_TIME = 1500; // ms
     public static final int HUD_TOP = 10;
     public static final int HUD_LEFT = 20;
     public static final int MAX_MORALITY_LEVEL = 10;

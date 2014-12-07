@@ -78,12 +78,14 @@ public class ViewSystemDef extends AbstractSystemDef {
                 renderShared.dedFistAttackCol = RenderFactory.createDedFistCol(renderShared,
                     (int) attack
                         .pos.x);
+                renderShared.cooldownColAnimation = RenderFactory.createCoolDownAnimationCol(renderShared);
             } else {
 //                renderShared.rowAttack = RenderFactory.createRowAttack(renderShared, (int) attack
 //                    .pos.y);
                 renderShared.dedFistAttackRow = RenderFactory.createDedFistRow(renderShared,
                     (int) attack
                         .pos.y);
+                renderShared.cooldownRowAnimation = RenderFactory.createCoolDownAnimationRow(renderShared);
             }
         }
 
