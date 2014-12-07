@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.catinthedark.ld31.impl.bots.Walker;
 import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.impl.message.BlockCreateReq;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
@@ -13,10 +14,7 @@ import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Pipe;
 import com.catinthedark.ld31.lib.io.Port;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.catinthedark.ld31.lib.util.SysUtils.conditional;
 
@@ -35,6 +33,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
         createJumper = serialPort(sys::createJumper);
         jumperJump = asyncPort(sys::jumperJump);
         createWalker = serialPort(sys::createShooter);
+        walkerWalk = asyncPort(sys::walkerGo);
         createShooter = serialPort(sys::createWalker);
         onGameStart = serialPort(sys::onGameStart);
     }
@@ -46,6 +45,7 @@ public class PhysicsSystemDef extends AbstractSystemDef {
     public final Port<Integer> createJumper;
     public final Port<Integer> jumperJump;
     public final Port<Integer> createWalker;
+    public final Port<Integer> walkerWalk;
     public final Port<Integer> createShooter;
     public final Port<Nothing> handlePlayerJump;
     public final Port<Nothing> onGameStart;
@@ -254,8 +254,28 @@ public class PhysicsSystemDef extends AbstractSystemDef {
                 Vector2(0, 0), true);
         }
 
-        void walkerGo(){
-            
+
+        void walkerGo(Integer id){
+            Body wBody = walkers.get(id);
+            Walker walker = gameShared.walkers.map(id);
+            //possible removed
+            if(wBody == null)
+                return;
+            if(walker.nSteps <= 0){
+                walker.nSteps = walker.rand.nextInt(Walker.MAX_STEPS);
+                if(walker.rand.nextInt() % 2 == 0)
+                    walker.dirX = DirectionX.LEFT;
+                else
+                    walker.dirX = DirectionX.RIGHT;
+            }
+            walker.nSteps--;
+            Vector2 wVec = null;
+            if(walker.dirX ==  DirectionX.LEFT)
+                wVec = Constants.WALKING_FORCE_LEFT;
+            else
+                wVec = Constants.WALKING_FORCE_RIGHT;
+
+            wBody.applyLinearImpulse(wVec.cpy().scl(0.5f), new Vector2(0,0), true);
         }
     }
 }

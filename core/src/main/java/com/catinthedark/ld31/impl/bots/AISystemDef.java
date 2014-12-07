@@ -30,6 +30,7 @@ public class AISystemDef extends AbstractSystemDef {
     public final Port<Integer> createWalker;
     public final Port<Integer> destroyJumper;
     public final Pipe<Integer> jumperJump = new Pipe<>();
+    public final Pipe<Integer> walkerGo = new Pipe<>();
 
     private class Sys {
         Sys(GameShared shared) {
@@ -53,6 +54,14 @@ public class AISystemDef extends AbstractSystemDef {
                         jumper.state = Jumper.State.QUIET;
                     }, 500);
 
+                }
+            });
+
+            walkersIds.forEach(jid -> {
+                Walker walker = shared.walkers.map(jid);
+                if (Math.abs(walker.pos.x - shared.pPos.get().x) < 10) {
+                    System.out.println("walker(" + jid + ") active");
+                    walkerGo.write(jid);
                 }
             });
         }
