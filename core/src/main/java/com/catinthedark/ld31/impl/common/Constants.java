@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
+    public static final int SHOOT_TIME = 1100; // ms
     public static final int COOLDOWN_INDICATOR_COL_X = 1185;
     public static final int COOLDOWN_INDICATOR_COL_Y = 510;
     public static final int COOLDOWN_INDICATOR_ROW_X = 1185;

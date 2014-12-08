@@ -90,7 +90,13 @@ public class GameScreen extends Screen<RenderShared> {
 
                 shared.shootersIds.forEach(jid -> {
                     Shooter shooter = shared.gameShared.shooters.map(jid);
-                    batch.draw(Assets.textures.gop, shooter.pos.x * 32 - 28, shooter.pos.y * 32);
+                    if (shooter.state == Shooter.State.QUIET) {
+                        batch.draw(Assets.textures.gop, shooter.pos.x * 32 - 28, shooter.pos.y * 32);
+                    } else {
+                        batch.draw(Assets.animations.gop_anim.getKeyFrame(shooter.getAttackTime()),
+                                shooter.pos.x * 32 - 28, shooter.pos.y * 32);
+                    }
+                    shooter.updateAttackTime(Gdx.graphics.getDeltaTime());
                 });
                 Vector2 pPos = shared.gameShared.pPos.get();
                 batch.draw(Assets.textures.childTexture, pPos.x * 32 - 28, pPos.y * 32);

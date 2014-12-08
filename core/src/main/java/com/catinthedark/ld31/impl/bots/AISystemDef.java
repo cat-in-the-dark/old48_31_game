@@ -1,5 +1,6 @@
 package com.catinthedark.ld31.impl.bots;
 
+import com.catinthedark.ld31.impl.common.Constants;
 import com.catinthedark.ld31.impl.common.GameShared;
 import com.catinthedark.ld31.impl.common.GameState;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
@@ -85,10 +86,12 @@ public class AISystemDef extends AbstractSystemDef {
                     Shooter.State.QUIET) {
                     System.out.println("shooter(" + jid + ") active");
                     shooter.state = Shooter.State.SHOOT;
-                    shooterShoot.write(jid);
+                    defer(() -> {
+                        shooterShoot.write(jid);
+                    }, 550);
                     defer(() -> {
                         shooter.state = Shooter.State.QUIET;
-                    }, 1100);
+                    }, Constants.SHOOT_TIME);
 
                 }
             });
