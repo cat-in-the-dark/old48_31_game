@@ -3,6 +3,7 @@ package com.catinthedark.ld31.impl.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.assets.loaders.PixmapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.catinthedark.ld31.impl.common.*;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
@@ -18,6 +19,7 @@ public class InputSystemDef extends AbstractSystemDef {
     public final Pipe<Nothing> onGameStart = new Pipe<>();
     public final Port<Nothing> onGameOver;
     public final Pipe<DirectionX> playerMove = new Pipe<>();
+    public final Pipe<PlayerState> playerStateChange = new Pipe<>();
     public final Pipe<Nothing> playerJump = new Pipe<>();
     public final Pipe<DaddyAttack> daddyAttack = new Pipe<>();
     public final Port<Nothing> gotoTutorial;
@@ -148,10 +150,15 @@ public class InputSystemDef extends AbstractSystemDef {
 
         void pollMove(float delta) {
             if (sys.state == GameState.IN_GAME) {
-                if (Gdx.input.isKeyPressed(Input.Keys.A))
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                     playerMove.write(DirectionX.LEFT);
-                if (Gdx.input.isKeyPressed(Input.Keys.D))
+                    playerStateChange.write(PlayerState.WALK);
+                } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                     playerMove.write(DirectionX.RIGHT);
+                    playerStateChange.write(PlayerState.WALK);
+                } else {
+                    playerStateChange.write(PlayerState.STAY);
+                }
             }
         }
 

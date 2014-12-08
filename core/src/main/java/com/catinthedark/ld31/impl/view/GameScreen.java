@@ -14,6 +14,7 @@ import com.catinthedark.ld31.impl.bots.Shooter;
 import com.catinthedark.ld31.impl.bots.Walker;
 import com.catinthedark.ld31.impl.common.Assets;
 import com.catinthedark.ld31.impl.common.Constants;
+import com.catinthedark.ld31.impl.common.PlayerState;
 import com.catinthedark.ld31.impl.level.LevelBlock;
 import com.catinthedark.ld31.lib.view.Layer;
 import com.catinthedark.ld31.lib.view.Screen;
@@ -93,13 +94,20 @@ public class GameScreen extends Screen<RenderShared> {
                     if (shooter.state == Shooter.State.QUIET) {
                         batch.draw(Assets.textures.gop, shooter.pos.x * 32 - 28, shooter.pos.y * 32);
                     } else {
-                        batch.draw(Assets.animations.gop_anim.getKeyFrame(shooter.getAttackTime()),
+                        batch.draw(Assets.animations.gopAnim.getKeyFrame(shooter.getAttackTime()),
                                 shooter.pos.x * 32 - 28, shooter.pos.y * 32);
                     }
                     shooter.updateAttackTime(Gdx.graphics.getDeltaTime());
                 });
                 Vector2 pPos = shared.gameShared.pPos.get();
-                batch.draw(Assets.textures.childTexture, pPos.x * 32 - 28, pPos.y * 32);
+                if (shared.gameShared.pState.get() == PlayerState.STAY) {
+                    batch.draw(Assets.textures.childTexture, pPos.x * 32 - 28, pPos.y * 32);
+                    shared.gameShared.playerAnimationTime = 0;
+                } else {
+                    batch.draw(Assets.animations.childAnim.getKeyFrame(shared.gameShared.playerAnimationTime),
+                            pPos.x * 32 - 28, pPos.y * 32);
+                    shared.gameShared.playerAnimationTime += Gdx.graphics.getDeltaTime();
+                }
 
                 shared.bottlesIds.forEach(jid -> {
                     Bottle bottle = shared.gameShared.bottles.map(jid);

@@ -45,6 +45,7 @@ public class Ld31 extends ApplicationAdapter {
         inputSystem.gotoMenu.connect(viewSystem.gotoMenu);
         inputSystem.onGameStart.connect(physicsSystem.onGameStart, levelSystem.onGameStart,
             viewSystem.onGameStart, aiSystem.gameStart);
+        inputSystem.playerStateChange.connect(viewSystem.handlePlayerMove);
 
         physicsSystem.blockDestroyed.connect(levelSystem.blockDestroyed);
 

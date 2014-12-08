@@ -7,6 +7,7 @@ import com.catinthedark.ld31.impl.level.LevelMatrix2;
 import com.catinthedark.ld31.lib.AbstractSystemDef;
 import com.catinthedark.ld31.lib.common.Nothing;
 import com.catinthedark.ld31.lib.io.Port;
+import com.catinthedark.ld31.lib.shm.SharedVal;
 import com.catinthedark.ld31.lib.view.ScreenManager;
 
 /**
@@ -18,6 +19,7 @@ public class ViewSystemDef extends AbstractSystemDef {
         sys = new Sys(gameShared, levelView);
         updater(sys::render);
         handleDaddyAttack = asyncPort(sys::handleDaddyAttack);
+        handlePlayerMove = asyncPort(sys::handlePlayerMove);
         gotoTutorial = serialPort(sys::gotoTutorial);
         gotoTutorial2 = serialPort(sys::gotoTutorial2);
         gotoTutorial3 = serialPort(sys::gotoTutorial3);
@@ -37,6 +39,7 @@ public class ViewSystemDef extends AbstractSystemDef {
 
     final Sys sys;
     public final Port<DaddyAttack> handleDaddyAttack;
+    public final Port<PlayerState> handlePlayerMove;
     public final Port<Nothing> gotoTutorial;
     public final Port<Nothing> gotoTutorial2;
     public final Port<Nothing> gotoTutorial3;
@@ -88,6 +91,10 @@ public class ViewSystemDef extends AbstractSystemDef {
                 renderShared.gameShared.cameraPosX.update(vec -> vec.x = renderShared.camera
                     .position.x);
             }
+        }
+
+        void handlePlayerMove(PlayerState playerState) {
+            renderShared.gameShared.pState = new SharedVal<>(playerState);
         }
 
         void handleDaddyAttack(DaddyAttack attack) {

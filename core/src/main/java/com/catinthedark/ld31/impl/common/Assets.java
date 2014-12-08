@@ -62,6 +62,8 @@ public class Assets {
         public Texture coolDownIndicatorRow;
         public TextureRegion gopFrames[][];
         public Texture gopAnimFrame;
+        public TextureRegion childFrames[][];
+        public Texture childAnimFrame;
         public Texture bgTex;
 
         @Override
@@ -73,6 +75,7 @@ public class Assets {
             lady = new Texture(Gdx.files.internal("texture/lady.png"));
             gop = new Texture(Gdx.files.internal("texture/gopstop.png"));
             gopAnimFrame = new Texture(Gdx.files.internal("texture/gopstop_animation.png"));
+            childAnimFrame = new Texture(Gdx.files.internal("texture/child_aimation.png"));
             bottle = new Texture(Gdx.files.internal("texture/bottle.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
             Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
@@ -88,6 +91,7 @@ public class Assets {
             coolDownIndicatorCol = new Texture(Gdx.files.internal("texture/punch_ready_col.png"));
             coolDownIndicatorRow = new Texture(Gdx.files.internal("texture/punch_ready_row.png"));
             gopFrames = TextureRegion.split(gopAnimFrame, 120, 128);
+            childFrames = TextureRegion.split(childAnimFrame, childAnimFrame.getWidth() / 4, childAnimFrame.getHeight());
             bgTex = new Texture(Gdx.files.internal("texture/bg.png"));
         }
     }
@@ -125,12 +129,17 @@ public class Assets {
             return regions.toArray(new TextureRegion[regions.size()]);
         }
 
-        public Animation gop_anim;
+        public Animation gopAnim;
+        public Animation childAnim;
 
         @Override
         public void init() {
-            gop_anim = new Animation(0.05f, selectRegions(textures.gopFrames, new int[] { 0, 1, 2,
+            gopAnim = new Animation(0.05f, selectRegions(textures.gopFrames, new int[] { 0, 1, 2,
                     3, 4, 5, 6, 7, 8, 9}));
+            childAnim = new Animation(0.2f, selectRegions(textures.childFrames, new int[] {
+                    0, 1, 2, 3
+            }));
+            childAnim.setPlayMode(Animation.PlayMode.LOOP);
         }
 
     }
