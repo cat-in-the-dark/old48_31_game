@@ -89,8 +89,11 @@ public class InputSystemDef extends AbstractSystemDef {
 
             @Override
             public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.W)
-                    playerJump.write(Nothing.NONE);
+                if (sys.state == GameState.IN_GAME) {
+                    if (keycode == Input.Keys.W) {
+                        playerJump.write(Nothing.NONE);
+                    }
+                }
 
                 if (keycode == Input.Keys.ENTER) {
                     switch (sys.state) {
@@ -144,10 +147,12 @@ public class InputSystemDef extends AbstractSystemDef {
         GameState state = GameState.INIT;
 
         void pollMove(float delta) {
-            if (Gdx.input.isKeyPressed(Input.Keys.A))
-                playerMove.write(DirectionX.LEFT);
-            if (Gdx.input.isKeyPressed(Input.Keys.D))
-                playerMove.write(DirectionX.RIGHT);
+            if (sys.state == GameState.IN_GAME) {
+                if (Gdx.input.isKeyPressed(Input.Keys.A))
+                    playerMove.write(DirectionX.LEFT);
+                if (Gdx.input.isKeyPressed(Input.Keys.D))
+                    playerMove.write(DirectionX.RIGHT);
+            }
         }
 
         void gotoTutorial(Nothing none) {
