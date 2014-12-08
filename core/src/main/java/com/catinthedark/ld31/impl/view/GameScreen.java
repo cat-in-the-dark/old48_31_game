@@ -86,7 +86,10 @@ public class GameScreen extends Screen<RenderShared> {
 
                 shared.walkerids.forEach(jid -> {
                     Walker walker = shared.gameShared.walkers.map(jid);
-                    batch.draw(Assets.textures.lady, walker.pos.x * 32 - 28, walker.pos.y * 32);
+                    batch.draw(Assets.animations.ladyAnim.getKeyFrame(walker.walkTime),
+                            walker.pos.x * 32 - 28, walker.pos.y * 32);
+                    walker.walkTime += Gdx.graphics.getDeltaTime();
+//                    batch.draw(Assets.textures.lady, walker.pos.x * 32 - 28, walker.pos.y * 32);
                 });
 
                 shared.shootersIds.forEach(jid -> {

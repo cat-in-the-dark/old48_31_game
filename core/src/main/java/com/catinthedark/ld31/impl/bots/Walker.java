@@ -16,6 +16,7 @@ public class Walker {
     public static final int MAX_STEPS = 5;
 
     public Vector2 pos = new Vector2();
+    public float walkTime = 0;
 
     public Walker(float x, float y) {
         pos.set(x, y);

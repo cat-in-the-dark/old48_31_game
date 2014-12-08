@@ -64,6 +64,8 @@ public class Assets {
         public Texture gopAnimFrame;
         public TextureRegion childFrames[][];
         public Texture childAnimFrame;
+        public TextureRegion ladyFrames[][];
+        public Texture ladyAnimFrame;
         public Texture bgTex;
 
         @Override
@@ -76,6 +78,7 @@ public class Assets {
             gop = new Texture(Gdx.files.internal("texture/gopstop.png"));
             gopAnimFrame = new Texture(Gdx.files.internal("texture/gopstop_animation.png"));
             childAnimFrame = new Texture(Gdx.files.internal("texture/child_aimation.png"));
+            ladyAnimFrame = new Texture(Gdx.files.internal("texture/lady_animation.png"));
             bottle = new Texture(Gdx.files.internal("texture/bottle.png"));
             runningStringTex = new Texture(Gdx.files.internal("texture/running_string.png"));
             Texture runningStringTex = new Texture(Gdx.files.internal("texture/lenta.png"));
@@ -92,6 +95,7 @@ public class Assets {
             coolDownIndicatorRow = new Texture(Gdx.files.internal("texture/punch_ready_row.png"));
             gopFrames = TextureRegion.split(gopAnimFrame, 120, 128);
             childFrames = TextureRegion.split(childAnimFrame, childAnimFrame.getWidth() / 4, childAnimFrame.getHeight());
+            ladyFrames = TextureRegion.split(ladyAnimFrame, ladyAnimFrame.getWidth() / 4, ladyAnimFrame.getHeight());
             bgTex = new Texture(Gdx.files.internal("texture/bg.png"));
         }
     }
@@ -131,6 +135,7 @@ public class Assets {
 
         public Animation gopAnim;
         public Animation childAnim;
+        public Animation ladyAnim;
 
         @Override
         public void init() {
@@ -140,6 +145,10 @@ public class Assets {
                     0, 1, 2, 3
             }));
             childAnim.setPlayMode(Animation.PlayMode.LOOP);
+            ladyAnim = new Animation(0.2f, selectRegions(textures.ladyFrames, new int[] {
+                    0, 1, 2, 3
+            }));
+            ladyAnim.setPlayMode(Animation.PlayMode.LOOP);
         }
 
     }
