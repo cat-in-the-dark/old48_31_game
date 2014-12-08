@@ -45,7 +45,7 @@ public class Constants {
 
 	public static final float WALKING_FORCE = 3.0f;
 	public static final float BULLET_FORCE = 3.0f;
-	public static final int FRICTION = 1;
+	public static final int FRICTION = 3;
 	public static final Vector2 WALKING_FORCE_RIGHT = new Vector2(
 			WALKING_FORCE, 0f);
 	public static final Vector2 WALKING_FORCE_LEFT = new Vector2(-1
